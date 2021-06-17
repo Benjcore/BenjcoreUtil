@@ -1,2 +1,7 @@
 /.vs/
 /bin/
+/obj/
+
+gitReAdd.bat
+.editorconfig
+C#-util.code-workspace
