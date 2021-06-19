@@ -11,10 +11,16 @@ namespace util
     public class Main {
 
         //Version
-        public static readonly string version = "0.0.0";
+        private static readonly string version = "0.0.0";
+
+        public static string Version {
+            get {
+                return version;
+            }
+        }
 
         public static void main(String[] args) {
-            Console.WriteLine($"Benjcore Utilities C# Version {version}");
+            Console.WriteLine($"Benjcore Utilities C# Version {Version}");
         }
 
     }
