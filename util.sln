@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{670C498A-A063-4066-8640-6FD32C2B8BE7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Class1.cs = Class1.cs
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSTesting", "..\CSTesting\CSTesting.csproj", "{5626382C-47D9-4AE6-9444-DD29BDF4081B}"

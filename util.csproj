@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigFile.cs" />
     <Compile Include="io.cs" />
     <Compile Include="util.cs" />
     <Compile Include="Main.cs" />

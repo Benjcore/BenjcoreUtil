@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace util {
 
-    public class io {
+    public static class io {
 
         /*
         IMPORTANT :

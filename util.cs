@@ -5,7 +5,7 @@ using System.Globalization;
 namespace util
 {
 
-	public class util {
+	public static class util {
 
 		private static char symbol;
 		
