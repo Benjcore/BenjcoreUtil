@@ -2,6 +2,8 @@
 /bin/
 /obj/
 /.vscode/
+/src/bin/
+/src/obj/
 
 gitReAdd.bat
 .editorconfig

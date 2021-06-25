@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFileObject.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="ConfigFile.cs" />
     <Compile Include="io.cs" />
     <Compile Include="util.cs" />
