@@ -6,7 +6,7 @@ namespace util {
 	
     //TODO: Add Documentation to README.md
 
-    public class ConfigFile {
+    public class ConfigFile : IFileObject {
 
         private readonly string path;
         public string Path {

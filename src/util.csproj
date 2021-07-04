@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\UnkownLoggerLevelException.cs" />
     <Compile Include="IFileObject.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ConfigFile.cs" />
