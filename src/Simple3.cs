@@ -67,7 +67,7 @@ namespace ver {
             return calc(true, true, (Simple3)input);
         }
 
-        public bool isEquals(object input) {
+        public bool isEqual(object input) {
             return calc(false, true, (Simple3)input, onlyEql:true);
         }
 
