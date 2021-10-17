@@ -8,6 +8,8 @@ To Make some common programming tasks easier.
 - Simple IO Actions
 - Time and Date Management 
 - Reading Basic Config Files
-- A Easy to use Logger
+- Versioning System
+- An Easy to use Logger
+
 
 ...And more!

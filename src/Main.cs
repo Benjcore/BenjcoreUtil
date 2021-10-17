@@ -11,7 +11,7 @@ namespace util
     public class Main {
 
         //Version
-        private static readonly string version = "1.1.0";
+        private static readonly string version = "1.1.1";
 
         public static string Version {
             get {

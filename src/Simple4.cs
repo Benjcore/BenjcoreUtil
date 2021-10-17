@@ -34,23 +34,48 @@ namespace ver {
             data = new List<object>() {Val1, Val2, Val3, Val4};
         }
 
-        private bool calc(bool older, Simple4 input) {
-            for (int i = 0; i < Data.Count; i++) {
-                if ((int)Data[i] > (int)input.Data[i]) {
-                    return !older;
-                } else if ((int)Data[i] < (int)input.Data[i]) {
-                    break;
+        private bool calc(bool older, bool orEql, Simple4 input, bool onlyEql = false) {
+            if (!orEql) {
+                for (int i = 0; i < Data.Count; i++) {
+                    if ((int)Data[i] > (int)input.Data[i]) {
+                        return !older;
+                    } else if ((int)Data[i] < (int)input.Data[i]) {
+                        break;
+                    }
+                }
+            } else {
+                for (int i = 0; i < Data.Count; i++) {
+                    if ((int)Data[i] == (int)input.Data[i]) {
+                        return true;
+                    }
+                    if ((int)Data[i] > (int)input.Data[i]) {
+                        return !older;
+                    } else if ((int)Data[i] < (int)input.Data[i]) {
+                        break;
+                    }
                 }
             }
             return older;
         }
 
         public bool isNewerThan(object input) {
-            return calc(false, (Simple4)input);
+            return calc(false, false, (Simple4)input);
         }
 
         public bool isOlderThan(object input) {
-            return calc(true, (Simple4)input);
+            return calc(true, false, (Simple4)input);
+        }
+
+        public bool isNewerThanOrEqualTo(object input) {
+            return calc(false, true, (Simple4)input);
+        }
+
+        public bool isOlderThanOrEqualTo(object input) {
+            return calc(true, true, (Simple4)input);
+        }
+
+        public override bool Equals(object input) {
+            return calc(false, true, (Simple4)input, onlyEql:true);
         }
 
         public override string ToString() {
