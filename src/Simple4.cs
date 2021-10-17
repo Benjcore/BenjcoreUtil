@@ -74,7 +74,7 @@ namespace ver {
             return calc(true, true, (Simple4)input);
         }
 
-        public override bool Equals(object input) {
+        public bool isEquals(object input) {
             return calc(false, true, (Simple4)input, onlyEql:true);
         }
 

@@ -67,7 +67,7 @@ namespace ver {
             return calc(true, true, (Simple3)input);
         }
 
-        public override bool Equals(object input) {
+        public bool isEquals(object input) {
             return calc(false, true, (Simple3)input, onlyEql:true);
         }
 
