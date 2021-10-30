@@ -59,17 +59,17 @@ namespace util {
             if (!File.Exists(Name)) {
                 File.Create(Name);
             } else {
-                throw new IOException($"File {Name} alreay exists.");
+                throw new IOException($"File {Name} already exists.");
             }
         }
 
         public static bool exist(string Name) {
             //Checks if a file exists
-            return File.Exists($"{dir()}\\{Name}");
+            return File.Exists(Name);
         }
 
         public static bool testDir(string testFile, bool StackTrace) {
-            //Ckecks if the program can read and write to a directory with a sample file.
+            //Checks if the program can read and write to a directory with a sample file.
             const string sampleText = "This is a Test file.";
             try {
             if (exist(testFile)) throw new IOException($"{testFile} already exists.");
