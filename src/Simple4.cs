@@ -35,25 +35,34 @@ namespace ver {
         }
 
         private bool calc(bool older, bool orEql, Simple4 input, bool onlyEql = false) {
-            if (!orEql) {
-                for (int i = 0; i < Data.Count; i++) {
-                    if ((int)Data[i] > (int)input.Data[i]) {
-                        return !older;
-                    } else if ((int)Data[i] < (int)input.Data[i]) {
-                        break;
+            if (!onlyEql) {
+                if (!orEql) {
+                    for (int i = 0; i < Data.Count; i++) {
+                        if ((int)Data[i] > (int)input.Data[i]) {
+                            return !older;
+                        } else if ((int)Data[i] < (int)input.Data[i]) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < Data.Count; i++) {
+                        if ((int)Data[i] == (int)input.Data[i] && i == Data.Count - 1) {
+                            return true;
+                        }
+                        if ((int)Data[i] > (int)input.Data[i]) {
+                            return !older;
+                        } else if ((int)Data[i] < (int)input.Data[i]) {
+                            break;
+                        }
                     }
                 }
             } else {
                 for (int i = 0; i < Data.Count; i++) {
-                    if ((int)Data[i] == (int)input.Data[i]) {
-                        return true;
-                    }
-                    if ((int)Data[i] > (int)input.Data[i]) {
-                        return !older;
-                    } else if ((int)Data[i] < (int)input.Data[i]) {
-                        break;
+                    if ((int)Data[i] != (int)input.Data[i]) {
+                        return false;
                     }
                 }
+                return true;
             }
             return older;
         }

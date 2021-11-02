@@ -173,6 +173,9 @@ namespace util {
             } else {
                 if (levelMapReverse[level] <= levelMapReverse[PrintReq]) print = true;
             }
+            //Update Time & Date
+            date.update();
+            time.update();
             //Generate Output
             string output = "";
             if (logToFile || print) {
