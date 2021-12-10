@@ -31,6 +31,9 @@ namespace ver {
             if (!onlyEql) {
                 if (!orEql) {
                     for (int i = 0; i < Data.Count; i++) {
+                        if ((int)Data[i] == (int)input.Data[i] && i == Data.Count - 1) {
+                            return false;
+                        }
                         if ((int)Data[i] > (int)input.Data[i]) {
                             return !older;
                         } else if ((int)Data[i] < (int)input.Data[i]) {
