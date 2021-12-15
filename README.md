@@ -10,6 +10,7 @@ To Make some common programming tasks easier.
 - Reading Basic Config Files
 - Versioning System
 - An Easy to use Logger
+- Hashing and Encryption
 
 
 ...And more!

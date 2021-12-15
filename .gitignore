@@ -4,6 +4,8 @@
 /.vscode/
 /src/bin/
 /src/obj/
+/util.UnitTests/obj/
+/util.UnitTests/bin/
 
 gitReAdd.bat
 .editorconfig

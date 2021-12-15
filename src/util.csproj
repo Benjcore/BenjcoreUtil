@@ -47,8 +47,10 @@
     <Compile Include="Logger.cs" />
     <Compile Include="ConfigFile.cs" />
     <Compile Include="io.cs" />
+    <Compile Include="security\RSAKeys.cs" />
     <Compile Include="Simple4.cs" />
     <Compile Include="Simple3.cs" />
+    <Compile Include="security\simpleMD5.cs" />
     <Compile Include="util.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
