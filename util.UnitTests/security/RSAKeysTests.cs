@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Security.Cryptography;
 using util.security;
 
 namespace util.UnitTests.security {
@@ -19,6 +20,17 @@ namespace util.UnitTests.security {
             string b64output = RSAKeys.EncryptBase64(sampleText, RSAKeys.GetKey(pub));
 
             Assert.AreEqual(sampleText, RSAKeys.Decrypt(b64output, RSAKeys.GetKey(priv)));
+            Assert.AreEqual(sampleText, RSAKeys.Decrypt(b64output, RSAKeys.GetKey(RSAKeys.KeyToString(RSAKeys.GetKey(priv)))));
+
+            RSACryptoServiceProvider rSAParameters = new RSACryptoServiceProvider();
+            rSAParameters.ImportParameters(RSAKeys.GetKey(RSAKeys.KeyToString(RSAKeys.GetKey(pub))));
+            b64output = RSAKeys.EncryptBase64(sampleText, rSAParameters.ExportParameters(false));
+
+            Assert.AreEqual(sampleText, RSAKeys.Decrypt(b64output, RSAKeys.GetKey(priv)));
+            Assert.AreEqual(sampleText, RSAKeys.Decrypt(b64output, RSAKeys.GetKey(RSAKeys.KeyToString(RSAKeys.GetKey(priv)))));
+
+            Assert.AreEqual(pub, RSAKeys.KeyToString(rSAParameters.ExportParameters(false)));
+            // Assert.AreEqual(RSAKeys.GetKey(keys.PublicKeyString), rSAParameters.ExportParameters(false));
 
             keys.UpdateKeys();
             Assert.AreNotEqual(keys.PublicKeyString, pub);

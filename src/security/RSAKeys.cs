@@ -3,6 +3,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 using System.Security.Cryptography;
+using System.Xml;
 
 namespace util.security {
 
@@ -51,20 +52,28 @@ namespace util.security {
 
 		}
 
+		public static byte[] DecodeKey(RSAParameters key) {
+
+			var sw = new Utf8StringWriter();
+			var wrt = XmlWriter.Create(sw);
+			var xs = new XmlSerializer(typeof(RSAParameters));
+			xs.Serialize(wrt, key);
+			return Encoding.UTF8.GetBytes(sw.ToString());
+
+		}
+
 		public static string KeyToString(RSAParameters key) {
 
-			var sw = new StringWriter();
-			var xs = new XmlSerializer(typeof(RSAParameters));
-			xs.Serialize(sw, key);
-			return sw.ToString();
+			return Encoding.UTF8.GetString(DecodeKey(key));
 
 		}
 
 		public static RSAParameters GetKey(string input) {
 
 			var sr = new StringReader(input);
+			var xmlr = new XmlTextReader(sr) { Normalization = false } ;
 			var xs = new XmlSerializer(typeof(RSAParameters));
-			return (RSAParameters)xs.Deserialize(sr);
+			return (RSAParameters)xs.Deserialize(xmlr);
 
 		}
 
@@ -143,6 +152,10 @@ namespace util.security {
 
 		}
 
+	}
+
+	internal class Utf8StringWriter : StringWriter {
+		public override Encoding Encoding => Encoding.UTF8;
 	}
 
 }
