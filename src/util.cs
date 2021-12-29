@@ -161,7 +161,7 @@ namespace util
 			}
 		}
 
-		public TimeObject(bool twentyfourhour, bool ms, bool FileNameFriendly) {
+		public TimeObject(bool twentyfourhour, bool ms, bool fileNameFriendly) {
 			this.Twentyfourhour = twentyfourhour;
 			this.Ms = ms;
 			this.FileNameFriendly = fileNameFriendly;
