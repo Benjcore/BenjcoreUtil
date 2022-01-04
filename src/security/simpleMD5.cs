@@ -19,6 +19,19 @@ namespace util.security {
 
 		}
 
+		public static string getMD5(byte[] input) {
+
+			using (MD5 md5 = MD5.Create()) {
+				byte[] inputMD5Bin = md5.ComputeHash(input);
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < inputMD5Bin.Length; i++) {
+					sb.Append(inputMD5Bin[i].ToString("X2"));
+				}
+				return sb.ToString();
+			}
+
+		}
+
 	}
 
 }
