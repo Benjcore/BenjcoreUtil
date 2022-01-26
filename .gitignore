@@ -1,14 +1,16 @@
+# Folders
+/.idea/
 /.vs/
 /bin/
 /obj/
 /.vscode/
-/src/bin/
-/src/obj/
-/util.UnitTests/obj/
-/util.UnitTests/bin/
+/UnitTests/bin/
+/UnitTests/obj/
 
+
+# Files
 gitReAdd.bat
 .editorconfig
-C#-util.code-workspace
-src/util.csproj.user
 UpgradeLog.htm
+BenjcoreUtil.sln.DotSettings
+BenjcoreUtil.sln.DotSettings.user

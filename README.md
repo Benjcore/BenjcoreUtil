@@ -5,8 +5,6 @@ To Make some common programming tasks easier.
 
 ### Some Features Include :
 - Clearing Windows Console Windows
-- Simple IO Actions
-- Time and Date Management
 - Versioning System
 - An Easy to use Logger
 - Hashing and Encryption
