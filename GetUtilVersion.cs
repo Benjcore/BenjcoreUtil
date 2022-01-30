@@ -3,11 +3,15 @@
 namespace BenjcoreUtil;
 
 public static class GetUtilVersion {
-
-  // Version As Int Array
+  
+  /// <summary>
+  /// BenjcoreUtil Version as an Int Array.
+  /// </summary>
   public static readonly int[] VersionAsIntArray = { 2, 0, 0 };
   
-  // Version As String
+  /// <summary>
+  /// BenjcoreUtil Version as a String.
+  /// </summary>
   public static readonly string VersionAsString = 
     $"{VersionAsIntArray[0]}.{VersionAsIntArray[1]}.{VersionAsIntArray[2]}";
   

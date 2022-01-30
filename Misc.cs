@@ -4,7 +4,9 @@ namespace BenjcoreUtil;
 
 public static class Misc {
 
-  // Clears The Window of a Console App.
+  /// <summary>
+  /// Clears The Window of a Console App.
+  /// </summary>
   public static void Clear(bool useCmd = false) {
     
     /*
