@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace BenjcoreUtil.Versioning; 
@@ -167,6 +168,54 @@ public class Simple : IVersionType<object> {
 
     sb.Length -= 1;
     return sb.ToString();
+
+  }
+
+  /// <summary>
+  /// Converts the string representation of a simple version number to its simple object equivalent.
+  /// </summary>
+  /// <param name="input">A string containing numbers seperated by periods to convert. e.g. "1.2.9".</param>
+  /// <returns>A simple version equivalent to the string s.</returns>
+  /// <exception cref="ArgumentNullException">input is null.</exception>
+  /// <exception cref="FormatException">input is not in the correct format.</exception>
+  /// <exception cref="OverflowException">A number in input is not within
+  /// the 32-Bit signed integer limits.</exception>
+  /// <remarks>input may begin with a 'v' (case insensitive) for styling.
+  /// The 'v' will be ignored.</remarks>
+  public static Simple Parse([NotNull] string? input) {
+
+    if (input == null) throw new ArgumentNullException(nameof(input));
+
+    if (input.ToLower()[0] is 'v') input = input[1..];
+    string[] inputSplit = input.Split('.');
+    int len = inputSplit.Length;
+    
+    int[] data = new int[len];
+    for (int i = 0; i < len; i++) { data[i] = Int32.Parse(inputSplit[i]); }
+    return new Simple(data);
+
+  }
+
+  /// <summary>
+  /// Converts the string representation of a simple version number to its simple version object equivalent.
+  /// <br></br>A return value indicates whether the conversion succeeded.
+  /// </summary>
+  /// <param name="input">A string containing numbers seperated by periods to convert. e.g. "1.2.9".</param>
+  /// <param name="result">When this method returns, contains the simple version object equivalent of
+  /// the string input, if the conversion succeeded, or null if the conversion failed.</param>
+  /// <returns>true if input was converted successfully; otherwise, false.</returns>
+  /// <remarks>input may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+  public static bool TryParse([NotNullWhen(true)] string? input, out Simple? result) {
+
+    try {
+      result = Parse(input);
+      return true;
+    } catch (Exception e) when (
+      e is ArgumentNullException or FormatException or OverflowException
+    ) {
+      result = null;
+      return false;
+    }
 
   }
   

@@ -99,7 +99,8 @@ public class SimpleTests {
 
   public static void TestSimple(
     KeyValuePair<Tuple<Simple, Simple>, Tuple<bool, bool, bool, bool, bool>> input,
-    bool allowDifferentLengthComparisons = false
+    bool allowDifferentLengthComparisons = false,
+    bool SkipParseTests = false
     ) {
     
     var (key, value) = input;
@@ -129,6 +130,8 @@ public class SimpleTests {
     {
       Assert.AreEqual(value.Item5, key.Item2.IsEqualTo(key.Item1));
     }
+    
+    // ToString() Tests
 
     foreach (var item in new[]{ key.Item1, key.Item2 }) {
       
@@ -154,6 +157,69 @@ public class SimpleTests {
         } else {
           // This is Fine because 0 ÷ 2 = 0
           Assert.AreEqual(item.Data[(i - 1) / 2], (int)tmp[i - 1]);
+        }
+
+      }
+      
+      // Parse & TryParse Tests
+      if (!SkipParseTests) {
+
+        // Parse Tests
+        {
+          
+          try {
+            var dummy = Simple.Parse(null);
+            Assert.IsTrue(false);
+          } catch (ArgumentNullException) {
+            Assert.IsTrue(true);
+          }
+
+          try {
+            var dummy = Simple.Parse("uKnxLDzd..UcCADXrPJkQXijASkSX!p6");
+            Assert.IsTrue(false);
+          } catch (FormatException) {
+            Assert.IsTrue(true);
+          }
+          
+          try {
+            var dummy = Simple.Parse($"v{Int64.MaxValue}.{Int64.MaxValue}");
+            Assert.IsTrue(false);
+          } catch (OverflowException) {
+            Assert.IsTrue(true);
+          }
+          
+          var s1 = Simple.Parse(input.Key.Item1.ToString());
+          var s2 = Simple.Parse($"V{input.Key.Item2.ToString()}");
+
+          TestSimple(
+            new KeyValuePair<Tuple<Simple, Simple>, Tuple<bool, bool, bool, bool, bool>>
+              (Tuple.Create<Simple, Simple>(s1, s2), input.Value),
+            true,
+            true
+          );
+        }
+        
+        // TryParse Tests
+        {
+
+          {
+            Assert.IsFalse(Simple.TryParse(null, out Simple? tst) || tst != null);
+            Assert.IsFalse(Simple.TryParse("uKnxLDzd..UcCADXrPJkQXijASkSX!p6", out tst) || tst != null);
+            Assert.IsFalse(Simple.TryParse($"v{Int64.MaxValue}.{Int64.MaxValue}", out tst) || tst != null);
+          }
+
+          Assert.IsTrue(Simple.TryParse(input.Key.Item1.ToString(), out var s1));
+          Assert.IsTrue(Simple.TryParse($"V{input.Key.Item2.ToString()}", out var s2));
+          
+          Assert.IsTrue(s1 != null);
+          Assert.IsTrue(s2 != null);
+
+          TestSimple(
+            new KeyValuePair<Tuple<Simple, Simple>, Tuple<bool, bool, bool, bool, bool>>
+              (Tuple.Create<Simple, Simple>(s1, s2), input.Value),
+            true,
+            true
+          );
         }
 
       }
