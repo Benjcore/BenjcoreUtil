@@ -56,6 +56,12 @@ public class VersionTests {
     foreach (var item in SampleVersions) {
 
       TestVersion(item);
+      
+      // Cover explicit string conversion.
+      Assert.AreEqual(item.Key.Item1.ToString(), (string)item.Key.Item1!);
+      Assert.AreEqual(item.Key.Item2.ToString(), (string)item.Key.Item2!);
+      Assert.AreEqual((string)(Simple)item.Key.Item1.InnerObject, (string)item.Key.Item1!);
+      Assert.AreEqual((string)(Simple)item.Key.Item2.InnerObject, (string)item.Key.Item2!);
 
     }
 
@@ -67,11 +73,14 @@ public class VersionTests {
     
     var (key, value) = input;
 
-    Assert.AreEqual(value.Item1, key.Item1.isNewerThan(key.Item2));
-    Assert.AreEqual(value.Item2,key.Item1.isNewerThanOrEqualTo(key.Item2));
-    Assert.AreEqual(value.Item3,key.Item1.isOlderThan(key.Item2));
-    Assert.AreEqual(value.Item4,key.Item1.isOlderThanOrEqualTo(key.Item2));
-    Assert.AreEqual(value.Item5,key.Item1.IsEqualTo(key.Item2));
+    Assert.AreEqual(value.Item1, key.Item1 > key.Item2);
+    Assert.AreEqual(value.Item2,key.Item1 >= key.Item2);
+    Assert.AreEqual(value.Item3,key.Item1 < key.Item2);
+    Assert.AreEqual(value.Item4,key.Item1 <= key.Item2);
+    Assert.AreEqual(value.Item5,key.Item1 == key.Item2);
+    
+    // Cover !=
+    Assert.AreEqual(!value.Item5,key.Item1 != key.Item2);
       
     // Backwards Tests
     if (value.Item5 /* Equal */) {
@@ -90,9 +99,15 @@ public class VersionTests {
       Assert.AreEqual(value.Item5, key.Item2.IsEqualTo(key.Item1));
     }
 
-    Assert.AreEqual(key.Item1.ToString(), key.Item1.InnerObject.ToString());
-    Assert.AreEqual(key.Item2.ToString(), key.Item2.InnerObject.ToString());
-    
+    // Other Tests
+    Assert.AreEqual(key.Item1.InnerObject.ToString(), key.Item1.ToString());
+    Assert.AreEqual(key.Item2.InnerObject.ToString(), key.Item2.ToString());
+    Assert.AreEqual(key.Item1.InnerObject.GetHashCode(), key.Item1.GetHashCode());
+    Assert.AreEqual(key.Item2.InnerObject.GetHashCode(), key.Item2.GetHashCode());
+    Assert.AreEqual(key.Item1 == key.Item2, key.Item1.Equals(key.Item2));
+    Assert.IsFalse(key.Item1.Equals(new object()));
+    Assert.IsFalse(key.Item2.Equals(new object()));
+
   }
   
 }

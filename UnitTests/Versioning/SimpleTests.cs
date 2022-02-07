@@ -86,7 +86,33 @@ public class SimpleTests {
         }
       }
     }
-
+    
+    // Cover Case null == not null
+    {
+      Simple? tmp = null;
+      var dummy = tmp == new Simple(new[] {1, 2, 0, 1});
+    }
+    
+    // Equals Tests
+    {
+      object dummy = new object();
+      Simple dummy2 = new Simple(new []{1});
+      Simple dummy3 = new Simple(new []{1});
+      Simple dummy4 = new Simple(new []{2});
+      
+      // ReSharper disable once EqualExpressionComparison
+      Assert.IsTrue(dummy2.Equals(dummy2));
+      Assert.IsTrue(dummy2.Equals(dummy3));
+      Assert.IsFalse(dummy2.Equals(dummy));
+      Assert.IsFalse(dummy2.Equals(dummy4));
+      Assert.AreEqual(dummy.Equals(dummy2), dummy2.Equals(dummy));
+    }
+    
+    // GetHashCode Tests
+    {
+      Simple dummy = new Simple(new []{1, 0, 89});
+      Assert.AreEqual(dummy.Data.GetHashCode(), dummy.GetHashCode());
+    }
 
     // Try SampleSimples
     foreach (var item in SampleSimples) {
@@ -108,11 +134,11 @@ public class SimpleTests {
     key.Item1.AllowDifferentLengthComparisons = allowDifferentLengthComparisons;
     key.Item2.AllowDifferentLengthComparisons = allowDifferentLengthComparisons;
     
-    Assert.AreEqual(value.Item1, key.Item1.isNewerThan(key.Item2));
-    Assert.AreEqual(value.Item2,key.Item1.isNewerThanOrEqualTo(key.Item2));
-    Assert.AreEqual(value.Item3,key.Item1.isOlderThan(key.Item2));
-    Assert.AreEqual(value.Item4,key.Item1.isOlderThanOrEqualTo(key.Item2));
-    Assert.AreEqual(value.Item5,key.Item1.IsEqualTo(key.Item2));
+    Assert.AreEqual(value.Item1, key.Item1 > key.Item2);
+    Assert.AreEqual(value.Item2,key.Item1 >= key.Item2);
+    Assert.AreEqual(value.Item3,key.Item1 < key.Item2);
+    Assert.AreEqual(value.Item4,key.Item1 <= key.Item2);
+    Assert.AreEqual(value.Item5,key.Item1 == key.Item2);
       
     // Backwards Tests
     if (value.Item5 /* Equal */) {
@@ -135,6 +161,7 @@ public class SimpleTests {
 
     foreach (var item in new[]{ key.Item1, key.Item2 }) {
       
+      Assert.AreEqual(item.ToString(), (string)item);
       string[] itemStr = item.ToString().Split('.');
       int len = itemStr.Length * 2 - 1;
 
@@ -223,9 +250,12 @@ public class SimpleTests {
         }
 
       }
+      
+      // Other Tests
+      Assert.AreEqual(key.Item1 == key.Item2, key.Item1.Equals(key.Item2));
 
     }
     
   }
-  
+
 }

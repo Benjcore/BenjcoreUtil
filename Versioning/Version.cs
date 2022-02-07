@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace BenjcoreUtil.Versioning; 
 
 public class Version : IVersionType<Version> {
@@ -34,9 +36,32 @@ public class Version : IVersionType<Version> {
   public bool IsEqualTo(Version input) {
     return InnerObject.IsEqualTo(input.InnerObject);
   }
+  
+  // Operators
+  public static explicit operator string?(Version input) => input.ToString();
+  public static bool operator ==(Version x, Version y) { return x.IsEqualTo(y); }
+  public static bool operator !=(Version x, Version y) { return !x.IsEqualTo(y); }
+  public static bool operator >(Version x, Version y) { return x.isNewerThan(y); }
+  public static bool operator <(Version x, Version y) { return x.isOlderThan(y); }
+  public static bool operator >=(Version x, Version y) { return x.isNewerThanOrEqualTo(y); }
+  public static bool operator <=(Version x, Version y) { return x.isOlderThanOrEqualTo(y); }
 
   public override string? ToString() {
     return InnerObject.ToString();
+  }
+  
+  public override bool Equals(object? obj) {
+    
+    if (obj is Version version) {
+      return InnerObject.Equals(version.InnerObject);
+    }
+    
+    return RuntimeHelpers.Equals(this, obj);
+    
+  }
+
+  public override int GetHashCode() {
+    return InnerObject.GetHashCode();
   }
   
 }

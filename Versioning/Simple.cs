@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BenjcoreUtil.Versioning; 
@@ -158,6 +159,20 @@ public class Simple : IVersionType<object> {
     var result = Calculate((Simple)input, AllowDifferentLengthComparisons);
     return result["EqualTo"];
   }
+  
+  // Operators
+  public static explicit operator string(Simple input) => input.ToString();
+
+  public static bool operator ==(Simple? x, Simple? y) {
+    if ((object?)y == null) return (object?)x == null;
+    if ((object?)x == null) return false;
+    return x.IsEqualTo(y);
+  }
+  public static bool operator !=(Simple? x, Simple? y) { return !(x == y); }
+  public static bool operator >(Simple x, Simple y) { return x.isNewerThan(y); }
+  public static bool operator <(Simple x, Simple y) { return x.isOlderThan(y); }
+  public static bool operator >=(Simple x, Simple y) { return x.isNewerThanOrEqualTo(y); }
+  public static bool operator <=(Simple x, Simple y) { return x.isOlderThanOrEqualTo(y); }
 
   public override string ToString() {
 
@@ -169,6 +184,20 @@ public class Simple : IVersionType<object> {
     sb.Length -= 1;
     return sb.ToString();
 
+  }
+
+  public override bool Equals(object? obj) {
+
+    if (obj is Simple) {
+      return IsEqualTo(obj);
+    }
+    
+    return RuntimeHelpers.Equals(this, obj);
+
+  }
+
+  public override int GetHashCode() {
+    return Data.GetHashCode();
   }
 
   /// <summary>
