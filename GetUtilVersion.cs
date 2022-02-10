@@ -1,5 +1,8 @@
 ﻿// ReSharper disable UnusedMember.Global
 
+using BenjcoreUtil.Versioning;
+using Version = BenjcoreUtil.Versioning.Version;
+
 namespace BenjcoreUtil;
 
 public static class GetUtilVersion {
@@ -14,7 +17,11 @@ public static class GetUtilVersion {
   /// </summary>
   public static readonly string VersionAsString = 
     $"{VersionAsIntArray[0]}.{VersionAsIntArray[1]}.{VersionAsIntArray[2]}";
-  
-  // TODO: Add Simple3 Version
+
+  /// <summary>
+  /// BenjcoreUtil Version as a BenjcoreUtil Version object.
+  /// </summary>
+  public static readonly Version VersionAsVersion =
+    new(new Simple(VersionAsIntArray));
 
 }
