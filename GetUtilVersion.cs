@@ -1,4 +1,5 @@
-﻿// ReSharper disable UnusedMember.Global
+﻿global using System;
+global using System.Collections.Generic;
 
 using BenjcoreUtil.Versioning;
 using Version = BenjcoreUtil.Versioning.Version;
