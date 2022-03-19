@@ -350,10 +350,8 @@ public class RSAKeys {
 }
 
 /// <summary>
-/// An enumerator that represents a RSA key length. e.g.
-/// <p>
-/// RSA2048 or RSA4096.
-/// </p>
+/// An enum that represents a RSA key length. e.g.
+/// <p>RSA2048 or RSA4096.</p>
 /// </summary>
 public enum RSAKeyLengths {
   RSA2048,

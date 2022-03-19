@@ -1,4 +1,5 @@
 global using BenjcoreUtil;
+global using System;
 global using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using BenjcoreUtil.Versioning;

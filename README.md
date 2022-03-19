@@ -1,4 +1,4 @@
-# CS-util : C# Port of Benjcore Utilities
+# BenjcoreUtil
 ### What is it?
 A C# Library with some simple Classes and Methods
 To Make some common programming tasks easier.
@@ -6,8 +6,5 @@ To Make some common programming tasks easier.
 ### Some Features Include :
 - Clearing Windows Console Windows
 - Versioning System
-- An Easy to use Logger
+- A Simple yet Powerful Logger
 - Hashing and Encryption
-
-
-...And more!
