@@ -10,19 +10,19 @@ namespace UnitTests.Versioning;
 public class SimpleTests {
 
   public static readonly Dictionary<Tuple<Simple, Simple>, Tuple<bool, bool, bool, bool, bool>> SampleSimples = new() {
-      [Tuple.Create<Simple, Simple>(new Simple(new []{1, 0, 1}), new Simple(new []{1, 1, 0}))]=
+      [Tuple.Create<Simple, Simple>(new Simple(new uint[]{1, 0, 1}), new Simple(new uint[]{1, 1, 0}))]=
         Tuple.Create<bool, bool, bool, bool, bool>(false, false, true, true, false),
-      [Tuple.Create<Simple, Simple>(new Simple(new []{1, 0, 0, 1}), new Simple(new []{1, 1, 0}))]=
+      [Tuple.Create<Simple, Simple>(new Simple(new uint[]{1, 0, 0, 1}), new Simple(new uint[]{1, 1, 0}))]=
         Tuple.Create<bool, bool, bool, bool, bool>(false, false, true, true, false),
-      [Tuple.Create<Simple, Simple>(new Simple(new []{1, 1, 0, 1}), new Simple(new []{1, 1, 0}))]=
+      [Tuple.Create<Simple, Simple>(new Simple(new uint[]{1, 1, 0, 1}), new Simple(new uint[]{1, 1, 0}))]=
         Tuple.Create<bool, bool, bool, bool, bool>(true, true, false, false, false),
-      [Tuple.Create<Simple, Simple>(new Simple(new []{1, 2, 0, 1}), new Simple(new []{1, 1, 0}))]=
+      [Tuple.Create<Simple, Simple>(new Simple(new uint[]{1, 2, 0, 1}), new Simple(new uint[]{1, 1, 0}))]=
         Tuple.Create<bool, bool, bool, bool, bool>(true, true, false, false, false),
-      [Tuple.Create<Simple, Simple>(new Simple(new []{1, 2, 0, 1, 30}), new Simple(new []{1, 166}))]=
+      [Tuple.Create<Simple, Simple>(new Simple(new uint[]{1, 2, 0, 1, 30}), new Simple(new uint[]{1, 166}))]=
         Tuple.Create<bool, bool, bool, bool, bool>(false, false, true, true, false),
-      [Tuple.Create<Simple, Simple>(new Simple(new []{1, 1, 0}), new Simple(new []{1, 1, 0}))]=
+      [Tuple.Create<Simple, Simple>(new Simple(new uint[]{1, 1, 0}), new Simple(new uint[]{1, 1, 0}))]=
         Tuple.Create<bool, bool, bool, bool, bool>(false, true, false, true, true),
-      [Tuple.Create<Simple, Simple>(new Simple(new []{1, 1, 0, 0}), new Simple(new []{1, 1, 0}))]=
+      [Tuple.Create<Simple, Simple>(new Simple(new uint[]{1, 1, 0, 0}), new Simple(new uint[]{1, 1, 0}))]=
         Tuple.Create<bool, bool, bool, bool, bool>(false, true, false, true, true)
   };
 
@@ -31,7 +31,7 @@ public class SimpleTests {
     
     // Check for NullReferenceException
     try {
-      var dummy = new Simple(Array.Empty<int>());
+      var dummy = new Simple(Array.Empty<uint>());
       Assert.IsTrue(false);
     } catch (NullReferenceException) {
       Assert.IsTrue(true);
@@ -39,13 +39,13 @@ public class SimpleTests {
     
     // Check AllowDifferentLengthComparisons Starts As False
     {
-      Simple tst = new Simple(new []{1, 0, 0});
+      Simple tst = new Simple(new uint[]{1, 0, 0});
       Assert.IsFalse(tst.AllowDifferentLengthComparisons);
     }
     
     // Check AllowDifferentLengthComparisons Can Be Changed
     {
-      Simple tst = new Simple(new []{1, 0, 0});
+      Simple tst = new Simple(new uint[]{1, 0, 0});
       tst.AllowDifferentLengthComparisons = true;
       Assert.IsTrue(tst.AllowDifferentLengthComparisons);
     }
@@ -53,8 +53,8 @@ public class SimpleTests {
     // Attempt to compare two Simple Versions of different lengths
     // Without AllowDifferentLengthComparisons:
     try {
-      Simple a = new Simple(new []{1, 0, 0});
-      Simple b = new Simple(new []{1, 0, 0, 0});
+      Simple a = new Simple(new uint[]{1, 0, 0});
+      Simple b = new Simple(new uint[]{1, 0, 0, 0});
       bool dummy = a.IsEqualTo(b);
       Assert.IsTrue(false);
     } catch (VersioningException) {
@@ -62,8 +62,8 @@ public class SimpleTests {
     }
     // With AllowDifferentLengthComparisons
     {
-      Simple a = new Simple(new[] {1, 0, 0});
-      Simple b = new Simple(new[] {1, 0, 0, 0});
+      Simple a = new Simple(new uint[] {1, 0, 0});
+      Simple b = new Simple(new uint[] {1, 0, 0, 0});
       a.AllowDifferentLengthComparisons = true;
       bool dummy = a.IsEqualTo(b);
       Assert.IsTrue(true);
@@ -90,15 +90,15 @@ public class SimpleTests {
     // Cover Case null == not null
     {
       Simple? tmp = null;
-      var dummy = tmp == new Simple(new[] {1, 2, 0, 1});
+      var dummy = tmp == new Simple(new uint[] {1, 2, 0, 1});
     }
     
     // Equals Tests
     {
       object dummy = new object();
-      Simple dummy2 = new Simple(new []{1});
-      Simple dummy3 = new Simple(new []{1});
-      Simple dummy4 = new Simple(new []{2});
+      Simple dummy2 = new Simple(new uint[]{1});
+      Simple dummy3 = new Simple(new uint[]{1});
+      Simple dummy4 = new Simple(new uint[]{2});
       
       // ReSharper disable once EqualExpressionComparison
       Assert.IsTrue(dummy2.Equals(dummy2));
@@ -110,7 +110,7 @@ public class SimpleTests {
     
     // GetHashCode Tests
     {
-      Simple dummy = new Simple(new []{1, 0, 89});
+      Simple dummy = new Simple(new uint[]{1, 0, 89});
       Assert.AreEqual(dummy.Data.GetHashCode(), dummy.GetHashCode());
     }
 
@@ -172,7 +172,7 @@ public class SimpleTests {
           tmp[i - 1] = '.';
         } else {
           // This is Fine because 0 ÷ 2 = 0
-          tmp[i - 1] = Int32.Parse(itemStr[(i - 1) / 2]);
+          tmp[i - 1] = UInt32.Parse(itemStr[(i - 1) / 2]);
         }
         
       }
@@ -183,7 +183,7 @@ public class SimpleTests {
           Assert.AreEqual('.', (char)tmp[i - 1]);
         } else {
           // This is Fine because 0 ÷ 2 = 0
-          Assert.AreEqual(item.Data[(i - 1) / 2], (int)tmp[i - 1]);
+          Assert.AreEqual(item.Data[(i - 1) / 2], (uint)tmp[i - 1]);
         }
 
       }

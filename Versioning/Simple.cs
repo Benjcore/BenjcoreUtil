@@ -7,13 +7,14 @@ namespace BenjcoreUtil.Versioning;
 public class Simple : IVersionType<object> {
 
   public bool AllowDifferentLengthComparisons { get; set; } = false;
-  public int[] Data { get; }
+  public uint[] Data { get; }
   public int Length => Data.Length;
 
-  public Simple(int[] values) {
+  public Simple(uint[] values) {
 
     if (values.Length < 1) throw new NullReferenceException("Simple Version must have at least 1 value.");
     Data = values;
+    
 
   }
 
@@ -28,105 +29,61 @@ public class Simple : IVersionType<object> {
       ["GreaterThan"]=false,
       ["EqualTo"]=true
     };
+    
+    int len = Math.Max(Length, input.Length);
+    
+    // EqualTo
+    for (int i = 0; i < len; i++) {
 
-    if (Length == input.Length) {
-      
-      // Check if the input is greater than current.
-      for (int i = 0; i < Length; i++) {
-        if (Data[i] > input.Data[i]) {
-          output["GreaterThan"] = true;
+      if (i >= Data.Length) {
+        
+        if (input.Data[i] != 0) {
+          output["EqualTo"] = false;
           break;
         }
-
-        if (Data[i] != input.Data[i]) {
+        
+      } else if (i >= input.Data.Length) {
+        
+        if (Data[i] != 0) {
+          output["EqualTo"] = false;
           break;
         }
-      }
-      
-      // Check if the input is equal to the current.
-      for (int i = 0; i < Length; i++) {
+        
+      } else {
+        
         if (Data[i] != input.Data[i]) {
           output["EqualTo"] = false;
           break;
         }
+        
       }
       
-    } else if (Length > input.Length) {
-      
-      // Check if the input is greater than current.
-      for (int i = 0; i < input.Length; i++) {
-        if (Data[i] > input.Data[i]) {
+    }
+    
+    // GreaterThan
+    for (int i = 0; i < len; i++) {
+
+      if (i >= Data.Length) {
+        
+        if (input.Data[i] != 0) {
+          output["GreaterThan"] = false;
+          break;
+        }
+        
+      } else if (i >= input.Data.Length) {
+        
+        if (Data[i] != 0) {
           output["GreaterThan"] = true;
           break;
         }
         
+      } else {
+        
         if (Data[i] != input.Data[i]) {
-          break;
-        }
-      }
-
-      // Check if the input is equal to the current.
-      for (int i = 0; i < input.Length; i++) {
-        if (Data[i] != input.Data[i]) {
-          output["EqualTo"] = false;
-          break;
-        }
-      }
-
-      /*
-       * Check for greater than as
-       * well as not equal to if
-       * input is longer than current
-       * or vise versa AND both have
-       * been equal thus far.
-       */
-      if (output["EqualTo"]) {
-        for (int i = input.Length; i < Length; i++) {
-          if (Data[i] > 0) {
-            output["GreaterThan"] = true;
-            output["EqualTo"] = false;
-            break;
-          }
-        }
-      }
-
-    } else {
-      
-      // Check if the input is greater than current.
-      for (int i = 0; i < Length; i++) {
-        if (Data[i] > input.Data[i]) {
-          output["GreaterThan"] = true;
+          output["GreaterThan"] = Data[i] > input.Data[i];
           break;
         }
         
-        if (Data[i] != input.Data[i]) {
-          break;
-        }
-      }
-
-      // Check if the input is equal to the current.
-      for (int i = 0; i < Length; i++) {
-        if (Data[i] != input.Data[i]) {
-          output["EqualTo"] = false;
-          break;
-        }
-      }
-
-      /*
-       * Check for greater than as
-       * well as not equal to if
-       * input is longer than current
-       * or vise versa AND both have
-       * been equal thus far.
-       */
-      if (output["EqualTo"]) {
-        for (int i = Length; i < input.Length; i++) {
-          if (input.Data[i] > 0) {
-            output["GreaterThan"] = false;
-            output["EqualTo"] = false;
-            break;
-          }
-        }
       }
       
     }
@@ -219,8 +176,8 @@ public class Simple : IVersionType<object> {
     string[] inputSplit = input.Split('.');
     int len = inputSplit.Length;
     
-    int[] data = new int[len];
-    for (int i = 0; i < len; i++) { data[i] = Int32.Parse(inputSplit[i]); }
+    uint[] data = new uint[len];
+    for (int i = 0; i < len; i++) { data[i] = UInt32.Parse(inputSplit[i]); }
     return new Simple(data);
 
   }
