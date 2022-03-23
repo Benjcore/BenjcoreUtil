@@ -33,7 +33,7 @@ public class SimpleTests {
     try {
       var dummy = new Simple(Array.Empty<uint>());
       Assert.IsTrue(false);
-    } catch (NullReferenceException) {
+    } catch (ArgumentException) {
       Assert.IsTrue(true);
     }
     
