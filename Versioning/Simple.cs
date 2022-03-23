@@ -234,7 +234,7 @@ public class Simple : IVersionType<object> {
   /// <summary>
   /// Converts the string representation of a simple version number to its simple object equivalent.
   /// </summary>
-  /// <param name="input">A string containing numbers seperated by periods to convert. e.g. "1.2.9".</param>
+  /// <param name="input">A string containing numbers separated by periods to convert. e.g. "1.2.9".</param>
   /// <returns>A simple version equivalent to the string s.</returns>
   /// <exception cref="ArgumentNullException">input is null.</exception>
   /// <exception cref="FormatException">input is not in the correct format.</exception>
@@ -260,7 +260,7 @@ public class Simple : IVersionType<object> {
   /// Converts the string representation of a simple version number to its simple version object equivalent.
   /// <br></br>A return value indicates whether the conversion succeeded.
   /// </summary>
-  /// <param name="input">A string containing numbers seperated by periods to convert. e.g. "1.2.9".</param>
+  /// <param name="input">A string containing numbers separated by periods to convert. e.g. "1.2.9".</param>
   /// <param name="result">When this method returns, contains the simple version object equivalent of
   /// the string input, if the conversion succeeded, or null if the conversion failed.</param>
   /// <returns>true if input was converted successfully; otherwise, false.</returns>

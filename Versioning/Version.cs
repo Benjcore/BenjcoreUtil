@@ -2,7 +2,7 @@ namespace BenjcoreUtil.Versioning;
 
 /// <summary>
 /// A wrapper class for classes that implement the <see cref="IVersionType{Self}"/> in most cases using this class
-/// rather than the class of specific version type (eg <see cref="Simple"/>) will improve code readability.
+/// rather than the class of the specific version type (eg <see cref="Simple"/>) will improve code readability.
 /// </summary>
 /// <remarks>
 /// The inner object wrapped by this class can be referenced using the <see cref="InnerObject"/> property.
