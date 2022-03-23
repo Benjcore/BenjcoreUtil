@@ -206,13 +206,3 @@ public class Simple : IVersionType<object> {
   }
   
 }
-
-public class VersioningException : Exception {
-  
-  public VersioningException() { }
-
-  public VersioningException(string Message) : base(Message) { }
-
-  public VersioningException(string Message, Exception inner) : base(Message, inner) { }
-  
-}
