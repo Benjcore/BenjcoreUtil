@@ -212,6 +212,18 @@ public class LoggerTests {
       Assert.IsTrue(true);
     }
     
+    // Duplicate LogLevel Names
+    try {
+      var dummy = new Logger(new LogLevel[] {
+          new("Test", 0, LogSettings.Nothing),
+          new("Test", 1, LogSettings.Nothing)},
+        Style, LogFile
+      );
+      Assert.IsTrue(false);
+    } catch (ArgumentException) {
+      Assert.IsTrue(true);
+    }
+    
     // Call Logger.Log() with invalid LogLevel.
     {
       Logger logger = new(SampleLogLevels, Style, LogFile);
@@ -229,6 +241,29 @@ public class LoggerTests {
       // Test with overlapping severity.
       try {
         logger.Log(testLevel2, SampleMessage);
+        Assert.IsTrue(false);
+      } catch (ArgumentException) {
+        Assert.IsTrue(true);
+      }
+    }
+    
+    // Call Logger.Log() with invalid string.
+    {
+      Logger logger = new(SampleLogLevels, Style, LogFile);
+      LogLevel testLevel1 = new("Invalid Level Test", Int16.MaxValue, LogSettings.PrintAndLog);
+      LogLevel testLevel2 = new("Invalid Level Test", 1, LogSettings.PrintAndLog);
+      
+      // Test with unique severity.
+      try {
+        logger.Log(testLevel1.Name, SampleMessage);
+        Assert.IsTrue(false);
+      } catch (ArgumentException) {
+        Assert.IsTrue(true);
+      }
+      
+      // Test with overlapping severity.
+      try {
+        logger.Log(testLevel2.Name, SampleMessage);
         Assert.IsTrue(false);
       } catch (ArgumentException) {
         Assert.IsTrue(true);
@@ -269,16 +304,40 @@ public class LoggerTests {
 
       }
       
+      foreach (var item in logger.Levels) {
+        
+        await logger.LogAsync(item.Name, SampleMessage);
+        string expected = logger.Style.FormatEvent(item, logger.Name, SampleMessage);
+
+        if (item.Print) {
+          
+          StringReader reader = new StringReader(StringWriter.ToString());
+          string res = await reader.ReadToEndAsync();
+          res = res.Replace("\n\r\n", "\n");
+          Assert.AreEqual(expected, res);
+          WipeStream();
+          
+        }
+        
+        if (item.Log && logger.StreamWriter is null)
+          Assert.AreEqual(expected.Replace("\n", ""), File.ReadLines(LogFile).Last());
+
+      }
+      
       if (logger.StreamWriter is not null) {
         
         logger.Dispose();
         StringBuilder expected = new StringBuilder();
         
-        foreach (var item in logger.Levels) {
+        for (ushort i = 0; i < 2; i++) {
           
-          if (item.Log)
-            expected.Append(logger.Style.FormatEvent(item, logger.Name, SampleMessage));
+          foreach (var item in logger.Levels) {
+          
+            if (item.Log)
+              expected.Append(logger.Style.FormatEvent(item, logger.Name, SampleMessage));
 
+          }
+          
         }
         
         Assert.AreEqual(expected.ToString(), await File.ReadAllTextAsync(LogFile));

@@ -40,7 +40,7 @@ public class Logger : IDisposable {
   /// </summary>
   /// <param name="levels">
   /// A <see cref="LogLevel"/> array that dictates the possible <see cref="LogLevel">LogLevels</see> that this
-  /// <see cref="Logger"/> can use. The array must contain at least one item and have no duplicate severities.
+  /// <see cref="Logger"/> can use. The array must contain at least one item and have no duplicate severities or names.
   /// </param>
   /// <param name="style">The <see cref="LogStyle"/> to use.</param>
   /// <param name="logFile">
@@ -51,14 +51,14 @@ public class Logger : IDisposable {
   /// </param>
   /// <param name="singleStream">
   /// If true, this object will have an open <see cref="System.IO.StreamWriter"/> until it goes out of scope.
-  /// The benefit of this is that a new IO stream will not need to be opened every time <see cref="Log"/> or
-  /// <see cref="LogAsync"/> is called, resulting in a performance boost. The downside is that <paramref name="logFile"/>
+  /// The benefit of this is that a new IO stream will not need to be opened every time <see cref="Log(LogLevel,string)"/> or
+  /// <see cref="LogAsync(LogLevel,string)"/> is called, resulting in a performance boost. The downside is that <paramref name="logFile"/>
   /// will not be able to be used by other processes and parts of your code. (Which may result in undesired errors.)
-  /// If false, <see cref="Log"/> and <see cref="LogAsync"/> will use <see cref="System.IO.File"/> instead, which comes
+  /// If false, <see cref="Log(LogLevel,string)"/> and <see cref="LogAsync(LogLevel,string)"/> will use <see cref="System.IO.File"/> instead, which comes
   /// with a performance penalty as it opens and closes a new IO stream every time it is called. If you are unsure,
   /// stick with the default (false).
   /// </param>
-  /// <exception cref="ArgumentException"><paramref name="levels"/> is empty or has duplicate severities.</exception>
+  /// <exception cref="ArgumentException"><paramref name="levels"/> is empty or has duplicate severities or names.</exception>
   public Logger(LogLevel[] levels, LogStyle style, string logFile, string? name = "Logger", bool singleStream = false) {
     
     Levels = levels;
@@ -70,6 +70,10 @@ public class Logger : IDisposable {
     List<int> levelSeverities = new();
     foreach (var item in Levels) levelSeverities.Add(item.Severity);
     
+    // Create a list of level names.
+    List<string> levelNames = new();
+    foreach (var item in Levels) levelNames.Add(item.Name);
+    
     // Ensure there is at least one LogLevel.
     if (levels.Length < 1)
       throw new ArgumentException("Empty array detected.", nameof(levels));
@@ -78,6 +82,11 @@ public class Logger : IDisposable {
     // ensure all levels are of a different severity level.
     if (levelSeverities.Distinct().Count() != levelSeverities.Count)
       throw new ArgumentException("Duplicate severity values detected.", nameof(levels));
+    
+    // Using the list of level severities,
+    // ensure all levels have different names.
+    if (levelNames.Distinct().Count() != levelNames.Count)
+      throw new ArgumentException("Duplicate level names detected.", nameof(levels));
 
     // Delete logFile if it already exists.
     if (File.Exists(logFile)) File.Delete(logFile);
@@ -88,6 +97,31 @@ public class Logger : IDisposable {
       StreamWriter = new StreamWriter(logFile);
     }
 
+  }
+  
+  /// <summary>
+  /// Logs an event in the <see cref="Logger"/>.
+  /// </summary>
+  /// <param name="levelName">The string <see cref="LogLevel.Name"/> of the event's <see cref="LogLevel"/>.
+  /// The <see cref="LogLevel"/> determines whether or not the event is logged and/or printed.</param>
+  /// <param name="message">A string message that details the event.</param>
+  /// <exception cref="ArgumentException"><paramref name="levelName"/> is not present in <see cref="Levels"/>.</exception>
+  public void Log(string levelName, string message) {
+    
+    LogLevel level;
+    
+    try {
+      
+      // Figure out LogLevel based on levelName.
+      level = (from item in Levels where item.Name == levelName select item).First();
+      
+    } catch (InvalidOperationException e) {
+      throw new ArgumentException($"Could not find LogLevel with the name '{levelName}'.", nameof(levelName), e);
+    }
+    
+    // Call Log(LogLevel, string)
+    Log(level, message);
+    
   }
   
   /// <summary>
@@ -160,13 +194,28 @@ public class Logger : IDisposable {
   /// <summary>
   /// Asynchronously logs an event in the <see cref="Logger"/>.
   /// </summary>
-  /// <param name="level"><inheritdoc cref="Log"/></param>
-  /// <param name="message"><inheritdoc cref="Log"/></param>
-  /// <exception cref="ArgumentException"><inheritdoc cref="Log"/></exception>
+  /// <param name="level"><inheritdoc cref="Log(LogLevel,string)"/></param>
+  /// <param name="message"><inheritdoc cref="Log(LogLevel,string)"/></param>
+  /// <exception cref="ArgumentException"><inheritdoc cref="Log(LogLevel,string)"/></exception>
   public async Task LogAsync(LogLevel level, string message) {
     
     // Create a task that runs Log().
     var task = new Task(delegate { Log(level, message); });
+    task.Start(); // Start Task
+    await task; // Await Completion
+    
+  }
+  
+  /// <summary>
+  /// Asynchronously logs an event in the <see cref="Logger"/>.
+  /// </summary>
+  /// <param name="levelName"><inheritdoc cref="Log(string,string)"/></param>
+  /// <param name="message"><inheritdoc cref="Log(string,string)"/></param>
+  /// <exception cref="ArgumentException"><inheritdoc cref="Log(string,string)"/></exception>
+  public async Task LogAsync(string levelName, string message) {
+    
+    // Create a task that runs Log().
+    var task = new Task(delegate { Log(levelName, message); });
     task.Start(); // Start Task
     await task; // Await Completion
     
