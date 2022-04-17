@@ -40,8 +40,8 @@ public class Logger : IDisposable {
   /// </summary>
   /// <param name="levels">
   /// A <see cref="LogLevel"/> array that dictates the possible <see cref="LogLevel">LogLevels</see> that this
-  /// <see cref="Logger"/> can use. The array must contain at least one item and have no duplicate severities or names.
-  /// </param>
+  /// <see cref="Logger"/> can use. The array must contain at least one item and have no duplicate severities
+  /// or names (case insensitive).</param>
   /// <param name="style">The <see cref="LogStyle"/> to use.</param>
   /// <param name="logFile">
   /// A string representing the path of the file that the <see cref="Logger"/> should output to.
@@ -72,7 +72,7 @@ public class Logger : IDisposable {
     
     // Create a list of level names.
     List<string> levelNames = new();
-    foreach (var item in Levels) levelNames.Add(item.Name);
+    foreach (var item in Levels) levelNames.Add(item.Name.ToUpper());
     
     // Ensure there is at least one LogLevel.
     if (levels.Length < 1)
@@ -102,7 +102,7 @@ public class Logger : IDisposable {
   /// <summary>
   /// Logs an event in the <see cref="Logger"/>.
   /// </summary>
-  /// <param name="levelName">The string <see cref="LogLevel.Name"/> of the event's <see cref="LogLevel"/>.
+  /// <param name="levelName">The string <see cref="LogLevel.Name"/> of the event's <see cref="LogLevel"/> (case insensitive).
   /// The <see cref="LogLevel"/> determines whether or not the event is logged and/or printed.</param>
   /// <param name="message">A string message that details the event.</param>
   /// <exception cref="ArgumentException"><paramref name="levelName"/> is not present in <see cref="Levels"/>.</exception>
@@ -113,7 +113,10 @@ public class Logger : IDisposable {
     try {
       
       // Figure out LogLevel based on levelName.
-      level = (from item in Levels where item.Name == levelName select item).First();
+      level = (from item in Levels
+               where String.Equals(item.Name, levelName,
+                 StringComparison.CurrentCultureIgnoreCase)
+               select item).First();
       
     } catch (InvalidOperationException e) {
       throw new ArgumentException($"Could not find LogLevel with the name '{levelName}'.", nameof(levelName), e);
