@@ -218,7 +218,7 @@ public class SimpleTests {
           try {
             var dummy = Simple.Parse(String.Empty);
             Assert.IsTrue(false);
-          } catch (FormatException) {
+          } catch (ArgumentNullException) {
             Assert.IsTrue(true);
           }
           

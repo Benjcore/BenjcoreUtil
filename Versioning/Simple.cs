@@ -236,7 +236,7 @@ public class Simple : IVersionType<object> {
   /// </summary>
   /// <param name="input">A string containing numbers separated by periods to convert. e.g. "1.2.9".</param>
   /// <returns>A simple version equivalent to the string s.</returns>
-  /// <exception cref="ArgumentNullException">input is null.</exception>
+  /// <exception cref="ArgumentNullException">input is null or empty.</exception>
   /// <exception cref="FormatException">input is not in the correct format.</exception>
   /// <exception cref="OverflowException">A number in input is not within
   /// the 32-Bit signed integer limits.</exception>
@@ -244,7 +244,7 @@ public class Simple : IVersionType<object> {
   /// The 'v' will be ignored.</remarks>
   public static Simple Parse([NotNull] string? input) {
 
-    if (input == null) throw new ArgumentNullException(nameof(input));
+    if (input is null || input.Length < 1) throw new ArgumentNullException(nameof(input));
 
     if (input.ToLower()[0] is 'v') input = input[1..];
     string[] inputSplit = input.Split('.');
