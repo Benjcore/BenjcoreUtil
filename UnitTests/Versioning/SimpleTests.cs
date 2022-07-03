@@ -209,6 +209,20 @@ public class SimpleTests {
           }
           
           try {
+            var dummy = Simple.Parse("uKnxLDzdUcCADXrPJkQXijASkSX!p6");
+            Assert.IsTrue(false);
+          } catch (FormatException) {
+            Assert.IsTrue(true);
+          }
+          
+          try {
+            var dummy = Simple.Parse(String.Empty);
+            Assert.IsTrue(false);
+          } catch (FormatException) {
+            Assert.IsTrue(true);
+          }
+          
+          try {
             var dummy = Simple.Parse($"v{Int64.MaxValue}.{Int64.MaxValue}");
             Assert.IsTrue(false);
           } catch (OverflowException) {
