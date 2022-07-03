@@ -7,8 +7,8 @@
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
         <Nullable>enable</Nullable>
         <Company>Benjcore</Company>
-        <AssemblyVersion>2.0.2</AssemblyVersion>
-        <FileVersion>2.0.2.0</FileVersion>
+        <AssemblyVersion>2.0.3</AssemblyVersion>
+        <FileVersion>2.0.3.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2022</Copyright>
         <NoWarn>1591</NoWarn>

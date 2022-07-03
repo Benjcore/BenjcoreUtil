@@ -11,7 +11,7 @@ public static class GetUtilVersion {
   /// <summary>
   /// BenjcoreUtil Version as an Int Array.
   /// </summary>
-  public static readonly uint[] VersionAsUIntArray = { 2, 0, 2 };
+  public static readonly uint[] VersionAsUIntArray = { 2, 0, 3 };
   
   /// <summary>
   /// BenjcoreUtil Version as a String.
