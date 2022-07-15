@@ -1,6 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+/*
+ * The code in this file is deprecated and does not need to conform to the style of the rest of the code.
+ */
+
 namespace BenjcoreUtil.Versioning; 
 
 /// <summary>

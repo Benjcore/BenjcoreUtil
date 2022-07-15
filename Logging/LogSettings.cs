@@ -1,4 +1,4 @@
-namespace BenjcoreUtil.Logging; 
+namespace BenjcoreUtil.Logging;
 
 /// <summary>
 /// LogSettings is an enum used to configure whether or not a <see cref="LogLevel"/> 
@@ -15,9 +15,10 @@ namespace BenjcoreUtil.Logging;
 /// <remarks>
 /// Note that 'Log' refers to logging to a file.
 /// </remarks>
-public enum LogSettings {
-  PrintAndLog,
-  JustLog,
-  JustPrint,
-  Nothing
+public enum LogSettings
+{
+    PrintAndLog,
+    JustLog,
+    JustPrint,
+    Nothing
 }
