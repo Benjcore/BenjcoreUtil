@@ -464,17 +464,3 @@ public class Version : IVersionType<Version> {
   }
   
 }
-
-// TODO: Move VersioningException
-/// <summary>
-/// An <see cref="Exception"/> that is thrown when a versioning related error occurs.
-/// </summary>
-public class VersioningException : Exception {
-  
-  public VersioningException() { }
-
-  public VersioningException(string Message) : base(Message) { }
-
-  public VersioningException(string Message, Exception inner) : base(Message, inner) { }
-  
-}

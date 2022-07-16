@@ -19,6 +19,8 @@ public class GetUtilVersionTests {
     Assert.AreEqual(GetUtilVersion.VersionAsString, GetUtilVersion.VersionAsVersion.ToString());
     Assert.AreEqual(new Version(new Simple(GetUtilVersion.VersionAsUIntArray)), GetUtilVersion.VersionAsVersion);
     Assert.AreEqual(new Version(Simple.Parse(GetUtilVersion.VersionAsString)), GetUtilVersion.VersionAsVersion);
+    Assert.AreEqual(new SimpleVersion(GetUtilVersion.VersionAsUIntArray), GetUtilVersion.VersionAsSimpleVersion);
+    Assert.AreEqual(SimpleVersion.Parse(GetUtilVersion.VersionAsString), GetUtilVersion.VersionAsSimpleVersion);
 
   }
   

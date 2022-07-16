@@ -19,7 +19,13 @@ public static class GetUtilVersion
         $"{VersionAsUIntArray[0]}.{VersionAsUIntArray[1]}.{VersionAsUIntArray[2]}";
 
     /// <summary>
-    /// BenjcoreUtil Version as a BenjcoreUtil Version object.
+    /// BenjcoreUtil Version as a BenjcoreUtil <see cref="Version"/> object.
     /// </summary>
+    [Obsolete("GetUtilVersion.VersionAsVersion is deprecated, use GetUtilVersion.VersionAsSimpleVersion instead.")]
     public static readonly Version VersionAsVersion = new(new Simple(VersionAsUIntArray));
+    
+    /// <summary>
+    /// BenjcoreUtil Version as a BenjcoreUtil <see cref="SimpleVersion"/> object.
+    /// </summary>
+    public static readonly SimpleVersion VersionAsSimpleVersion = new(VersionAsUIntArray);
 }
