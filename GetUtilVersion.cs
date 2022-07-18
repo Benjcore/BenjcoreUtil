@@ -1,7 +1,10 @@
 ﻿global using System;
 global using System.Collections.Generic;
 using BenjcoreUtil.Versioning;
+
+#pragma warning disable CS0618
 using Version = BenjcoreUtil.Versioning.Version;
+#pragma warning restore CS0618
 
 namespace BenjcoreUtil;
 
@@ -22,7 +25,9 @@ public static class GetUtilVersion
     /// BenjcoreUtil Version as a BenjcoreUtil <see cref="Version"/> object.
     /// </summary>
     [Obsolete("GetUtilVersion.VersionAsVersion is deprecated, use GetUtilVersion.VersionAsSimpleVersion instead.")]
+    #pragma warning disable CS0618
     public static readonly Version VersionAsVersion = new(new Simple(VersionAsUIntArray));
+    #pragma warning restore CS0618
     
     /// <summary>
     /// BenjcoreUtil Version as a BenjcoreUtil <see cref="SimpleVersion"/> object.

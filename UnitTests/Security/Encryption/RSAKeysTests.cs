@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace UnitTests.Security.Encryption; 
 

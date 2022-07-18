@@ -3,9 +3,11 @@
 using System;
 using System.Collections.Generic;
 using BenjcoreUtil.Versioning;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Version = BenjcoreUtil.Versioning.Version;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace UnitTests.Versioning; 
+namespace UnitTests.Legacy.Versioning; 
 
 [TestClass]
 public class VersionTests {

@@ -1,5 +1,7 @@
 using System.Text;
 using BenjcoreUtil.Security.Hashing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 // ReSharper disable StringLiteralTypo
 
 namespace UnitTests.Security.Hashing; 
