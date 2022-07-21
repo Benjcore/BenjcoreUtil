@@ -1,137 +1,693 @@
-// ReSharper disable RedundantUsingDirective
-// ^ Because of a Rider issue.
-using BenjcoreUtil.Security.Encryption;
-using System;
 using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using System.Threading.Tasks;
+using BenjcoreUtil.Security.Encryption;
 
-namespace UnitTests.Security.Encryption; 
+namespace UnitTests.Security.Encryption;
 
-[TestClass]
-public class RSAKeysTests {
-
-  public const string TestString =
-    "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. 1234567890";
-
-  [TestMethod]
-  public void RSAKeysTest() {
+public class RSAKeysTests
+{
+    private const string TestString =
+        "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. 1234567890";
     
-    // Cover KeySize ArgumentNullException
+    private readonly byte[] TestBytes = Encoding.UTF8.GetBytes(TestString);
+    
+    /*
+     * These unit tests are hella slow. This is due
+     * to the large amount of RSA key generation.
+     */
+
+    #region RSA2048
+
+    [Fact]
+    public async void RSAKeys_2048_EncryptDecrypt_CreateAsync()
     {
-      try {
-        var dummy = new RSAKeys(keyLengths:(RSAKeyLengths)UInt16.MaxValue);
-        Assert.IsTrue(false);
-      } catch (InvalidEnumArgumentException) {
-        Assert.IsTrue(true);
-      }
+        // Arrange
+        var rsaKeys = await RSAKeys.CreateAsync(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
     }
-
+    
+    [Fact]
+    public async void RSAKeys_2048_CreateAsync_ThrowsOnInvalidEnum()
     {
-      var task = RSAKeys.CreateAsync();
-      while (!task.IsCompleted) { }
-      Assert.IsFalse(String.IsNullOrEmpty(task.Result.PublicKeyString));
-    }
-
-    bool firstPass = true;
-
-    RSAKeys[] kpa = {
-      new (),
-      new (RSAKeyLengths.RSA4096)
-    };
-    
-    top:
-
-    foreach (var kp in kpa) {
-
-      Assert.IsFalse(String.IsNullOrEmpty(kp.PublicKeyString));
-      Assert.IsFalse(String.IsNullOrEmpty(kp.PrivateKeyString));
-
-      Assert.IsNotNull(kp.PublicKey);
-      Assert.IsNotNull(kp.PrivateKey);
-
-      Assert.IsTrue(kp.Equals(new RSAKeys(kp)));
-
-      {
-        RSAKeys kp2 = new RSAKeys(kp.UseKeySize);
-
-        EnsureDifferent(kp, kp2);
-        RSAKeys kp2Old = new RSAKeys(kp2);
-        Assert.IsTrue(kp2.Equals(kp2Old));
-        kp2.UpdateKeys();
-        Assert.IsFalse(kp2.Equals(kp2Old));
-      }
-
-      {
-        RSAKeys kp2 = new RSAKeys(kp);
-        EnsureSame(kp, kp2);
-        var task = kp2.UpdateKeysAsync();
-        while (!task.IsCompleted) { }
-        EnsureDifferent(kp, kp2);
-      }
-
-      // Validate Key Conversions
-      Assert.AreEqual(kp.PublicKeyString, RSAKeys.KeyToString(kp.PublicKey));
-      Assert.AreEqual(kp.PublicKeyString, RSAKeys.KeyToString(RSAKeys.GetKey(kp.PublicKeyString)));
-      Assert.AreEqual(kp.PrivateKeyString, RSAKeys.KeyToString(kp.PrivateKey));
-      Assert.AreEqual(kp.PrivateKeyString, RSAKeys.KeyToString(RSAKeys.GetKey(kp.PrivateKeyString)));
-      
-      // Encryption & Decryption Tests
-      {
-        RSAKeys kp2 = new RSAKeys(kp.UseKeySize);
-
-        Assert.AreEqual(TestString, RSAKeys.Decrypt(RSAKeys.EncryptBase64(TestString, kp.PublicKey), kp.PrivateKey));
-        Assert.AreEqual(TestString, RSAKeys.Decrypt(RSAKeys.EncryptBase64(Encoding.UTF8.GetBytes(TestString), kp.PublicKey), kp.PrivateKey));
-        Assert.AreEqual(TestString, RSAKeys.Decrypt(Convert.FromBase64String(RSAKeys.EncryptBase64(TestString, kp.PublicKey)), kp.PrivateKey));
-        Assert.AreEqual(TestString, Encoding.UTF8.GetString(RSAKeys.DecryptBytes(RSAKeys.EncryptBase64(Encoding.UTF8.GetBytes(TestString), kp.PublicKey), kp.PrivateKey)));
-        Assert.AreEqual(TestString, Encoding.UTF8.GetString(RSAKeys.DecryptBytes(Convert.FromBase64String(RSAKeys.EncryptBase64(TestString, kp.PublicKey)), kp.PrivateKey)));
-
-        try {
-          Assert.AreNotEqual(TestString, RSAKeys.Decrypt(RSAKeys.EncryptBase64(TestString, kp.PublicKey), kp2.PrivateKey));
-          Assert.AreNotEqual(TestString, RSAKeys.Decrypt(RSAKeys.EncryptBase64(Encoding.UTF8.GetBytes(TestString), kp.PublicKey), kp2.PrivateKey));
-          Assert.AreNotEqual(TestString, RSAKeys.Decrypt(Convert.FromBase64String(RSAKeys.EncryptBase64(TestString, kp.PublicKey)), kp2.PrivateKey));
-          Assert.AreNotEqual(TestString, Encoding.UTF8.GetString(RSAKeys.DecryptBytes(RSAKeys.EncryptBase64(Encoding.UTF8.GetBytes(TestString), kp.PublicKey), kp2.PrivateKey)));
-          Assert.AreNotEqual(TestString, Encoding.UTF8.GetString(RSAKeys.DecryptBytes(Convert.FromBase64String(RSAKeys.EncryptBase64(TestString, kp.PublicKey)), kp2.PrivateKey)));
-        } catch {
-          Assert.IsTrue(true);
-        }
-      }
-      
-      // Update Keys
-      kp.UpdateKeys();
-
+        // Arrange
+        var invalidEnum = (RSAKeyLengths)0xFF;
+        
+        // Act
+        var function = new Func<Task<RSAKeys>>(async () => await RSAKeys.CreateAsync(invalidEnum));
+        
+        // Assert
+        await Assert.ThrowsAsync<InvalidEnumArgumentException>(function);
     }
     
-    // Try again after key updates.
-    if (firstPass) {
-      firstPass = false;
-      goto top;
-    }
-
-  }
-
-  public static void EnsureDifferent(RSAKeys in1, RSAKeys in2) {
-
-    Assert.AreNotEqual(in1.PublicKey, in2.PublicKey);
-    Assert.AreNotEqual(in1.PrivateKey, in2.PrivateKey);
-    
-    Assert.AreNotEqual(in1.PublicKeyString, in2.PublicKeyString);
-    Assert.AreNotEqual(in1.PrivateKeyString, in2.PrivateKeyString);
-
-  }
-
-  public static void EnsureSame(RSAKeys in1, RSAKeys in2) {
-
-    try {
-      EnsureDifferent(in1, in2);
-      Assert.IsTrue(false);
-    } catch (AssertFailedException) {
-      Assert.IsTrue(true);
+    [Fact]
+    public void RSAKeys_2048_EncryptDecryptWithCloningConstructor()
+    {
+        // Arrange
+        var rsaKeys1 = new RSAKeys(RSAKeyLengths.RSA2048);
+        // ReSharper disable once JoinDeclarationAndInitializer
+        RSAKeys rsaKeys2;
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys1.PublicKey);
+        rsaKeys2 = new RSAKeys(rsaKeys1);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys2.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
     }
     
-  }
-  
+    [Fact]
+    public void RSAKeys_2048_EncryptDecryptThrowsOnWrongKey()
+    {
+        // Arrange
+        var rightKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        var wrongKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecryptThrowsOnDecryptingRSA4096()
+    {
+        // Arrange
+        var rightKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        var wrongKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_UpdateKeysChangesKeys()
+    {
+        // Arrange
+        var keys = new RSAKeys(RSAKeyLengths.RSA2048);
+
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, keys.PublicKey);
+        keys.UpdateKeys();
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+    }
+    
+    [Fact]
+    public async void RSAKeys_2048_UpdateKeysAsyncChangesKeys()
+    {
+        // Arrange
+        var keys = new RSAKeys(RSAKeyLengths.RSA2048);
+
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, keys.PublicKey);
+        await keys.UpdateKeysAsync();
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EqualsReturnsTrueWhenEqual()
+    {
+        // Arrange
+        var keys1 = new RSAKeys(RSAKeyLengths.RSA2048);
+
+        // Act
+        var keys2 = new RSAKeys(keys1);
+
+        // Assert
+        Assert.True(keys1.Equals(keys1));
+        Assert.True(keys1.Equals(keys2));
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EqualsReturnsFalseWhenNotEqual()
+    {
+        // Arrange
+        var keys1 = new RSAKeys(RSAKeyLengths.RSA2048);
+        var keys2 = new RSAKeys(keys1);
+        keys2.UpdateKeys();
+        
+        // Act
+        var keys3 = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Assert
+        Assert.False(keys1.Equals(keys2));
+        Assert.False(keys1.Equals(keys3));
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_GetKey()
+    {
+        // Arrange
+        var keys = new RSAKeys(RSAKeyLengths.RSA2048);
+        string publicKeyString = keys.PublicKeyString;
+        string privateKeyString = keys.PrivateKeyString;
+
+        // Act
+        var publicKey = RSAKeys.GetKey(publicKeyString);
+        var privateKey = RSAKeys.GetKey(privateKeyString);
+        var encrypted = RSAKeys.Encrypt(TestString, publicKey);
+        var decrypted = RSAKeys.Decrypt(encrypted, privateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    #region RSA2048 Encrypt Decrypt Combinations
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_BytesToBytesToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_BytesToBytesToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_StringToBytesToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_StringToBytesToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_BytesToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_BytesToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_StringToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecrypt_StringToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+
+    #endregion
+    
+    #region RSA2048 Encrypt Decrypt Base64 Combinations
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecryptBase64_BytesToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestBytes, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecryptBase64_StringToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecryptBase64_StringToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestString, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_2048_EncryptDecryptBase64_BytesToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestBytes, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+
+    #endregion
+    
+    #endregion
+
+    #region RSA4096
+    
+    [Fact]
+    public async void RSAKeys_4096_EncryptDecrypt_CreateAsync()
+    {
+        // Arrange
+        var rsaKeys = await RSAKeys.CreateAsync(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public async void RSAKeys_4096_CreateAsync_ThrowsOnInvalidEnum()
+    {
+        // Arrange
+        var invalidEnum = (RSAKeyLengths)0xFF;
+        
+        // Act
+        var function = new Func<Task<RSAKeys>>(async () => await RSAKeys.CreateAsync(invalidEnum));
+        
+        // Assert
+        await Assert.ThrowsAsync<InvalidEnumArgumentException>(function);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecryptWithCloningConstructor()
+    {
+        // Arrange
+        var rsaKeys1 = new RSAKeys(RSAKeyLengths.RSA4096);
+        // ReSharper disable once JoinDeclarationAndInitializer
+        RSAKeys rsaKeys2;
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys1.PublicKey);
+        rsaKeys2 = new RSAKeys(rsaKeys1);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys2.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecryptThrowsOnWrongKey()
+    {
+        // Arrange
+        var rightKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        var wrongKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecryptThrowsOnDecryptingRSA2048()
+    {
+        // Arrange
+        var rightKeys = new RSAKeys(RSAKeyLengths.RSA2048);
+        var wrongKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_UpdateKeysChangesKeys()
+    {
+        // Arrange
+        var keys = new RSAKeys(RSAKeyLengths.RSA4096);
+
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, keys.PublicKey);
+        keys.UpdateKeys();
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+    }
+    
+    [Fact]
+    public async void RSAKeys_4096_UpdateKeysAsyncChangesKeys()
+    {
+        // Arrange
+        var keys = new RSAKeys(RSAKeyLengths.RSA4096);
+
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, keys.PublicKey);
+        await keys.UpdateKeysAsync();
+
+        // Assert
+        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EqualsReturnsTrueWhenEqual()
+    {
+        // Arrange
+        var keys1 = new RSAKeys(RSAKeyLengths.RSA4096);
+
+        // Act
+        var keys2 = new RSAKeys(keys1);
+
+        // Assert
+        Assert.True(keys1.Equals(keys1));
+        Assert.True(keys1.Equals(keys2));
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EqualsReturnsFalseWhenNotEqual()
+    {
+        // Arrange
+        var keys1 = new RSAKeys(RSAKeyLengths.RSA4096);
+        var keys2 = new RSAKeys(keys1);
+        keys2.UpdateKeys();
+        
+        // Act
+        var keys3 = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Assert
+        Assert.False(keys1.Equals(keys2));
+        Assert.False(keys1.Equals(keys3));
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_GetKey()
+    {
+        // Arrange
+        var keys = new RSAKeys(RSAKeyLengths.RSA4096);
+        string publicKeyString = keys.PublicKeyString;
+        string privateKeyString = keys.PrivateKeyString;
+
+        // Act
+        var publicKey = RSAKeys.GetKey(publicKeyString);
+        var privateKey = RSAKeys.GetKey(privateKeyString);
+        var encrypted = RSAKeys.Encrypt(TestString, publicKey);
+        var decrypted = RSAKeys.Decrypt(encrypted, privateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    #region RSA4096 Encrypt Decrypt Combinations
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_BytesToBytesToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_BytesToBytesToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_StringToBytesToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_StringToBytesToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_BytesToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_BytesToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestBytes, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_StringToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecrypt_StringToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        byte[] encrypted = RSAKeys.Encrypt(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    #endregion
+    
+    #region RSA4096 Encrypt Decrypt Base64 Combinations
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecryptBase64_BytesToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestBytes, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecryptBase64_StringToStringToString()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestString, rsaKeys.PublicKey);
+        string decrypted = RSAKeys.Decrypt(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestString, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecryptBase64_StringToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestString, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    [Fact]
+    public void RSAKeys_4096_EncryptDecryptBase64_BytesToStringToBytes()
+    {
+        // Arrange
+        var rsaKeys = new RSAKeys(RSAKeyLengths.RSA4096);
+        
+        // Act
+        string encrypted = RSAKeys.EncryptBase64(TestBytes, rsaKeys.PublicKey);
+        byte[] decrypted = RSAKeys.DecryptBytes(encrypted, rsaKeys.PrivateKey);
+        
+        // Assert
+        Assert.Equal(TestBytes, decrypted);
+    }
+    
+    #endregion
+    
+    #endregion
+    
+    [Fact]
+    public void Utf8StringWriter()
+    {
+        // Arrange
+        using var writer = new Utf8StringWriter();
+        byte[] expected = Encoding.UTF8.GetBytes(TestString);
+        
+        // Act
+        writer.Write(TestString);
+        writer.Flush();
+        byte[] actual = Encoding.UTF8.GetBytes(writer.ToString());
+        
+        // Assert
+        Assert.Equal(expected, actual);               // Check that the Utf8StringWriter's string is UTF8.
+        Assert.Equal(Encoding.UTF8, writer.Encoding); // Check that the Utf8StringWriter's encoding is UTF8.
+    }
 }
