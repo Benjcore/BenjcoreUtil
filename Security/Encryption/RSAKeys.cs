@@ -31,12 +31,12 @@ public class RSAKeys
     {
         get
         {
-            switch (UseKeySize)
+            return UseKeySize switch
             {
-                case RSAKeyLengths.RSA2048: return 2048;
-                case RSAKeyLengths.RSA4096: return 4096;
-                default: throw new InvalidEnumArgumentException($"{nameof(UseKeySize)} is an invalid value.");
-            }
+                RSAKeyLengths.RSA2048 => 2048,
+                RSAKeyLengths.RSA4096 => 4096,
+                _ => throw new InvalidEnumArgumentException($"{nameof(UseKeySize)} is an invalid value.")
+            };
         }
     }
 
