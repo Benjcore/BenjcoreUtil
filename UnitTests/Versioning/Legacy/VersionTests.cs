@@ -1,5 +1,6 @@
 // ReSharper disable RedundantUsingDirective
 // ^ Because of a Rider issue.
+#pragma warning disable CS0618
 using System;
 using System.Collections.Generic;
 using BenjcoreUtil.Versioning;
@@ -7,7 +8,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Version = BenjcoreUtil.Versioning.Version;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace UnitTests.Legacy.Versioning; 
+namespace UnitTests.Versioning.Legacy;
+
+/*
+ * THIS FILE CONTAINS LEGACY TESTS.
+ * THESE TESTS DO NOT NEED TO BE MAINTAINED
+ * OR UPDATED TO THE CURRENT CODE STYLE.
+ */
 
 [TestClass]
 public class VersionTests {
