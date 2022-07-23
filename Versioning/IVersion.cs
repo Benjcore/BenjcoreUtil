@@ -7,28 +7,28 @@ public interface IVersion
     /// </summary>
     /// <param name="input">The version object you wish to compare.</param>
     /// <returns>Boolean Result</returns>
-    bool isNewerThan(IVersion input);
+    bool IsNewerThan(IVersion input);
   
     /// <summary>
     /// Checks if the version is newer than or equal to than another version.
     /// </summary>
     /// <param name="input">The version object you wish to compare.</param>
     /// <returns>Boolean Result</returns>
-    bool isNewerThanOrEqualTo(IVersion input);
+    bool IsNewerThanOrEqualTo(IVersion input);
   
     /// <summary>
     /// Checks if the version is older than another version.
     /// </summary>
     /// <param name="input">The version object you wish to compare.</param>
     /// <returns>Boolean Result</returns>
-    bool isOlderThan(IVersion input);
+    bool IsOlderThan(IVersion input);
   
     /// <summary>
     /// Checks if the version is older than or equal to than another version.
     /// </summary>
     /// <param name="input">The version object you wish to compare.</param>
     /// <returns>Boolean Result</returns>
-    bool isOlderThanOrEqualTo(IVersion input);
+    bool IsOlderThanOrEqualTo(IVersion input);
   
     /// <summary>
     /// Checks if the version is equal to than another version.
@@ -42,10 +42,10 @@ public interface IVersion
 
     #region Operators
     
-    public static bool operator >(IVersion x, IVersion y) { return x.isNewerThan(y); }
-    public static bool operator <(IVersion x, IVersion y) { return x.isOlderThan(y); }
-    public static bool operator >=(IVersion x, IVersion y) { return x.isNewerThanOrEqualTo(y); }
-    public static bool operator <=(IVersion x, IVersion y) { return x.isOlderThanOrEqualTo(y); }
+    public static bool operator >(IVersion x, IVersion y) { return x.IsNewerThan(y); }
+    public static bool operator <(IVersion x, IVersion y) { return x.IsOlderThan(y); }
+    public static bool operator >=(IVersion x, IVersion y) { return x.IsNewerThanOrEqualTo(y); }
+    public static bool operator <=(IVersion x, IVersion y) { return x.IsOlderThanOrEqualTo(y); }
     
     #endregion
 }

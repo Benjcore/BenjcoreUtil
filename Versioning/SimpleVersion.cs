@@ -66,6 +66,8 @@ public class SimpleVersion : IVersion
     {
         SimpleVersion current = new(Data);
         
+        // ReSharper disable once ConvertIfStatementToSwitchStatement
+        // ^ It looks quite messy to use a switch statement for this.
         if (!AllowDifferentLengthComparisons && current.Length != input.Length)
         {
             throw new VersioningException("Attempted to compare two SimpleVersions of different lengths.");
@@ -131,15 +133,15 @@ public class SimpleVersion : IVersion
     }
 
     /// <summary>
-    /// <inheritdoc cref="IVersion.isNewerThan"/>
+    /// <inheritdoc cref="IVersion.IsNewerThan"/>
     /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.isNewerThan"/></param>
-    /// <returns><inheritdoc cref="IVersion.isNewerThan"/></returns>
+    /// <param name="input"><inheritdoc cref="IVersion.IsNewerThan"/></param>
+    /// <returns><inheritdoc cref="IVersion.IsNewerThan"/></returns>
     /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
     /// <exception cref="InvalidOperationException">
     /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
     /// </exception>
-    public bool isNewerThan(IVersion input)
+    public bool IsNewerThan(IVersion input)
     {
         if (input is not SimpleVersion version)
         {
@@ -151,15 +153,15 @@ public class SimpleVersion : IVersion
     }
 
     /// <summary>
-    /// <inheritdoc cref="IVersion.isNewerThanOrEqualTo"/>
+    /// <inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/>
     /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.isNewerThanOrEqualTo"/></param>
-    /// <returns><inheritdoc cref="IVersion.isNewerThanOrEqualTo"/></returns>
+    /// <param name="input"><inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/></param>
+    /// <returns><inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/></returns>
     /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
     /// <exception cref="InvalidOperationException">
     /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
     /// </exception>
-    public bool isNewerThanOrEqualTo(IVersion input)
+    public bool IsNewerThanOrEqualTo(IVersion input)
     {
         if (input is not SimpleVersion version)
         {
@@ -171,15 +173,15 @@ public class SimpleVersion : IVersion
     }
 
     /// <summary>
-    /// <inheritdoc cref="IVersion.isOlderThan"/>
+    /// <inheritdoc cref="IVersion.IsOlderThan"/>
     /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.isOlderThan"/></param>
-    /// <returns><inheritdoc cref="IVersion.isOlderThan"/></returns>
+    /// <param name="input"><inheritdoc cref="IVersion.IsOlderThan"/></param>
+    /// <returns><inheritdoc cref="IVersion.IsOlderThan"/></returns>
     /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
     /// <exception cref="InvalidOperationException">
     /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
     /// </exception>
-    public bool isOlderThan(IVersion input)
+    public bool IsOlderThan(IVersion input)
     {
         if (input is not SimpleVersion version)
         {
@@ -191,15 +193,15 @@ public class SimpleVersion : IVersion
     }
 
     /// <summary>
-    /// <inheritdoc cref="IVersion.isOlderThanOrEqualTo"/>
+    /// <inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/>
     /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.isOlderThanOrEqualTo"/></param>
-    /// <returns><inheritdoc cref="IVersion.isOlderThanOrEqualTo"/></returns>
+    /// <param name="input"><inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/></param>
+    /// <returns><inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/></returns>
     /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
     /// <exception cref="InvalidOperationException">
     /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
     /// </exception>
-    public bool isOlderThanOrEqualTo(IVersion input)
+    public bool IsOlderThanOrEqualTo(IVersion input)
     {
         if (input is not SimpleVersion version)
         {
@@ -256,22 +258,22 @@ public class SimpleVersion : IVersion
 
     public static bool operator >(SimpleVersion x, SimpleVersion y)
     {
-        return x.isNewerThan(y);
+        return x.IsNewerThan(y);
     }
 
     public static bool operator <(SimpleVersion x, SimpleVersion y)
     {
-        return x.isOlderThan(y);
+        return x.IsOlderThan(y);
     }
 
     public static bool operator >=(SimpleVersion x, SimpleVersion y)
     {
-        return x.isNewerThanOrEqualTo(y);
+        return x.IsNewerThanOrEqualTo(y);
     }
 
     public static bool operator <=(SimpleVersion x, SimpleVersion y)
     {
-        return x.isOlderThanOrEqualTo(y);
+        return x.IsOlderThanOrEqualTo(y);
     }
     
     #endregion
