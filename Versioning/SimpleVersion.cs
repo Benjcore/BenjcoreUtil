@@ -308,10 +308,33 @@ public class SimpleVersion : IVersion
 
         return false;
     }
-
+    
+    /// <summary>
+    /// Gets the hash code for the current object.
+    /// </summary>
+    /// <returns>A hash code for the current object.</returns>
+    /// <remarks>
+    /// <b>NOTE: This method does NOT return the hash code of the reference like object.GetHashCode().</b>
+    /// </remarks>
     public override int GetHashCode()
     {
-        return Data.GetHashCode();
+        /*
+         * This hash code implementation basically creates a
+         * comma-separated string of the version data and then
+         * returns the hash code of that string.
+         */
+        
+        StringBuilder sb = new StringBuilder();
+        
+        foreach (var item in Data)
+        {
+            sb.Append($"{item},");
+        }
+        
+        // Remove the trailing comma.
+        sb.Length -= 1;
+        
+        return sb.ToString().GetHashCode();
     }
 
     /// <summary>
