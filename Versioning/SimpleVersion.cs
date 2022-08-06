@@ -290,7 +290,15 @@ public class SimpleVersion : IVersion
         sb.Length -= 1;
         return sb.ToString();
     }
-
+    
+    /// <summary>
+    /// Determines whether the specified object is equal to the current object.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+    /// <remarks>
+    /// <b>NOTE: This method does NOT compare references like object.Equals().</b>
+    /// </remarks>
     public override bool Equals(object? obj)
     {
         if (obj is SimpleVersion version)
@@ -319,7 +327,10 @@ public class SimpleVersion : IVersion
     /// The 'v' will be ignored.</remarks>
     public static SimpleVersion Parse([NotNull] string? input)
     {
-        if (input is null || input.Length < 1) throw new ArgumentNullException(nameof(input));
+        if (input is null || input.Length < 1)
+        {
+            throw new ArgumentNullException(nameof(input));
+        }
 
         if (input.ToLower()[0] is 'v') input = input[1..];
         string[] inputSplit = input.Split('.');
