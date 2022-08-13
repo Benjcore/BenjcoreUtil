@@ -68,9 +68,9 @@ public struct LogLevel
         {
             LogSettings.PrintAndLog => Tuple.Create<bool, bool>(true, true),
             LogSettings.JustLog => Tuple.Create<bool, bool>(true, false),
-            LogSettings.JustPrint => Tuple.Create<bool, bool>(false, true), 
-            LogSettings.Nothing => Tuple.Create<bool, bool>(false, false), 
-            
+            LogSettings.JustPrint => Tuple.Create<bool, bool>(false, true),
+            LogSettings.Nothing => Tuple.Create<bool, bool>(false, false),
+
             _ => throw new InvalidEnumArgumentException("Input is invalid."),
         };
     }

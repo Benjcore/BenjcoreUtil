@@ -17,7 +17,7 @@ public class SimpleVersion : IVersion
     /// <summary>
     /// An unsigned integer array containing the version number assigned from the constructor.
     /// </summary>
-    public uint[] Data { get; private init;}
+    public uint[] Data { get; private init; }
 
     /// <summary>
     /// A property representing the length of <see cref="Data"/>.
@@ -65,39 +65,39 @@ public class SimpleVersion : IVersion
     internal VersionComparisonResult Calculate(SimpleVersion input)
     {
         SimpleVersion current = new(Data);
-        
+
         // ReSharper disable once ConvertIfStatementToSwitchStatement
         // ^ It looks quite messy to use a switch statement for this.
         if (!AllowDifferentLengthComparisons && current.Length != input.Length)
         {
             throw new VersioningException("Attempted to compare two SimpleVersions of different lengths.");
         }
-        
+
         if (AllowDifferentLengthComparisons && current.Length != input.Length)
         {
             /*
              * Append zeros to the end of the shorter version until
              * it's length is equal to that of the longer version.
              */
-            
+
             // Get the shorter of two versions.
             SimpleVersion shorter = current.Length < input.Length ? current : input;
-            
+
             // Get the longer of two versions.
             SimpleVersion longer = current.Length > input.Length ? current : input;
-            
+
             List<uint> newData = shorter.Data.ToList();
-            
+
             for (int i = 0; i < longer.Length - shorter.Length; i++)
             {
                 newData.Add(0);
             }
-            
+
             // Set the shorter version's data to the new data.
             // Note: We have to check which version is shorter
             // again because we can't dereference 'shorter'
             // without using unsafe pointers.
-            if (current.Length < input.Length )
+            if (current.Length < input.Length)
             {
                 current = new SimpleVersion(newData.ToArray());
             }
@@ -109,7 +109,7 @@ public class SimpleVersion : IVersion
 
         bool greaterThan = false;
         bool equalTo = true;
-        
+
         // Note: Both versions are the same length at this point.
         int len = current.Length;
 
@@ -147,7 +147,7 @@ public class SimpleVersion : IVersion
         {
             throw new InvalidOperationException("SimpleVersion.isNewerThan can only be used with SimpleVersion objects.");
         }
-        
+
         var result = Calculate(version);
         return result.GreaterThan && !result.EqualTo;
     }
@@ -167,7 +167,7 @@ public class SimpleVersion : IVersion
         {
             throw new InvalidOperationException("SimpleVersion.isNewerThanOrEqualTo can only be used with SimpleVersion objects.");
         }
-        
+
         var result = Calculate(version);
         return result.GreaterThan || result.EqualTo;
     }
@@ -187,7 +187,7 @@ public class SimpleVersion : IVersion
         {
             throw new InvalidOperationException("SimpleVersion.isOlderThan can only be used with SimpleVersion objects.");
         }
-        
+
         var result = Calculate(version);
         return !result.GreaterThan && !result.EqualTo;
     }
@@ -207,7 +207,7 @@ public class SimpleVersion : IVersion
         {
             throw new InvalidOperationException("SimpleVersion.isOlderThanOrEqualTo can only be used with SimpleVersion objects.");
         }
-        
+
         var result = Calculate(version);
         return !result.GreaterThan || result.EqualTo;
     }
@@ -227,13 +227,13 @@ public class SimpleVersion : IVersion
         {
             throw new InvalidOperationException("SimpleVersion.IsEqualTo can only be used with SimpleVersion objects.");
         }
-        
+
         var result = Calculate(version);
         return result.EqualTo;
     }
 
-    #region Operators
-    
+#region Operators
+
     public static explicit operator string(SimpleVersion input) => input.ToString();
 
     public static bool operator ==(SimpleVersion? x, SimpleVersion? y)
@@ -242,12 +242,12 @@ public class SimpleVersion : IVersion
         {
             return (object?) x == null;
         }
-        
+
         if ((object?) x == null)
         {
             return false;
         }
-        
+
         return x.IsEqualTo(y);
     }
 
@@ -275,8 +275,8 @@ public class SimpleVersion : IVersion
     {
         return x.IsOlderThanOrEqualTo(y);
     }
-    
-    #endregion
+
+#endregion
 
     public override string ToString()
     {
@@ -290,7 +290,7 @@ public class SimpleVersion : IVersion
         sb.Length -= 1;
         return sb.ToString();
     }
-    
+
     /// <summary>
     /// Determines whether the specified object is equal to the current object.
     /// </summary>
@@ -308,7 +308,7 @@ public class SimpleVersion : IVersion
 
         return false;
     }
-    
+
     /// <summary>
     /// Gets the hash code for the current object.
     /// </summary>
@@ -323,17 +323,17 @@ public class SimpleVersion : IVersion
          * comma-separated string of the version data and then
          * returns the hash code of that string.
          */
-        
+
         StringBuilder sb = new StringBuilder();
-        
+
         foreach (var item in Data)
         {
             sb.Append($"{item},");
         }
-        
+
         // Remove the trailing comma.
         sb.Length -= 1;
-        
+
         return sb.ToString().GetHashCode();
     }
 

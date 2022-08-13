@@ -120,6 +120,7 @@ public struct LogStyle
                         {
                             // Check next char to ensure it's '{'
                             i++;
+
                             if (Data[i] is not '{')
                                 throw new FormatException($"Expected '{{' at char {i + 1}.");
 
@@ -141,11 +142,13 @@ public struct LogStyle
                         default:
                             throw new FormatException($"Unknown escape sequence: '{EscapeCharacter}{Data[i]}'");
                     }
-                } catch (IndexOutOfRangeException)
+                }
+                catch (IndexOutOfRangeException)
                 {
                     throw new FormatException("Unexpected end of format string.");
                 }
-            } else
+            }
+            else
             {
                 sb.Append(Data[i]);
             }

@@ -191,7 +191,7 @@ public class RSAKeys
     public static RSAParameters GetKey(string input)
     {
         var sr = new StringReader(input);
-        var xmlReader = new XmlTextReader(sr) {Normalization = false};
+        var xmlReader = new XmlTextReader(sr) { Normalization = false };
         var xs = new XmlSerializer(typeof(RSAParameters));
         return (RSAParameters) (xs.Deserialize(xmlReader) ?? throw new NullReferenceException());
     }
