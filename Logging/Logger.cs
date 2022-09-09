@@ -27,8 +27,9 @@ public class Logger : IDisposable
 
     /// <summary>
     /// A string representing the path of the file that the <see cref="Logger"/> should output to.
+    /// If null, then the <see cref="Logger"/> will not log to a file regardless of the <see cref="LogLevel"/>.
     /// </summary>
-    public string LogFile { get; }
+    public string? LogFile { get; }
 
     /// <summary>
     /// A string representing the name of the logger which can be referenced by <see cref="LogStyle"/>.
@@ -45,6 +46,7 @@ public class Logger : IDisposable
     /// <param name="style">The <see cref="LogStyle"/> to use.</param>
     /// <param name="logFile">
     /// A string representing the path of the file that the <see cref="Logger"/> should output to.
+    /// If null, then the <see cref="Logger"/> will not log to a file regardless of the <see cref="LogLevel"/>.
     /// </param>
     /// <param name="name">
     /// A string representing the name of the logger which can be referenced by <see cref="LogStyle"/>. Default: "Logger"
@@ -59,7 +61,7 @@ public class Logger : IDisposable
     /// stick with the default (false).
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="levels"/> is empty or has duplicate severities or names.</exception>
-    public Logger(LogLevel[] levels, LogStyle style, string logFile, string? name = "Logger", bool singleStream = false)
+    public Logger(LogLevel[] levels, LogStyle style, string? logFile, string? name = "Logger", bool singleStream = false)
     {
         Levels = levels;
         Style = style;
@@ -93,7 +95,7 @@ public class Logger : IDisposable
 
         // Initialize StreamWriter if singleStream is true,
         // else it will stay as null.
-        if (singleStream)
+        if (singleStream && logFile is not null)
         {
             StreamWriter = new StreamWriter(logFile);
         }
@@ -173,7 +175,7 @@ public class Logger : IDisposable
             formattedMessage = Style.FormatEvent(level, Name, message);
         }
 
-        if (level.Log)
+        if (level.Log && LogFile is not null)
         {
             if (StreamWriter is null)
             {
