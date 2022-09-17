@@ -87,10 +87,12 @@ public readonly struct LogStyle
     /// <param name="level">The name of the <see cref="LogLevel"/> of the event.</param>
     /// <param name="loggerName">The name of the logger.</param>
     /// <param name="logEvent">The string body of the event.</param>
+    /// <param name="dateTime">The date and time that the event occured. If null, it will default to <see cref="DateTime.Now"/>.</param>
     /// <returns>The formatted string output.</returns>
     /// <exception cref="FormatException"><see cref="Data"/> is invalid.</exception>
-    public string FormatEvent(string level, string loggerName, string logEvent)
+    public string FormatEvent(string level, string loggerName, string logEvent, DateTime? dateTime)
     {
+        DateTime givenDateTime = dateTime ?? DateTime.Now;
         StringBuilder sb = new StringBuilder();
 
         for (uint i = 0; i < Data.Length; i++)
@@ -133,7 +135,7 @@ public readonly struct LogStyle
                                 i++;
                             }
 
-                            sb.Append(DateTime.Now.ToString(sb2.ToString()));
+                            sb.Append(givenDateTime.ToString(sb2.ToString()));
 
                             break;
                         }
@@ -165,11 +167,38 @@ public readonly struct LogStyle
     /// <param name="level">The <see cref="LogLevel"/> of the event.</param>
     /// <param name="loggerName">The name of the logger.</param>
     /// <param name="logEvent">The string body of the event.</param>
+    /// <param name="dateTime">The date and time that the event occured. If null, it will default to <see cref="DateTime.Now"/>.</param>
+    /// <returns>The formatted string output.</returns>
+    /// <exception cref="FormatException"><see cref="Data"/> is invalid.</exception>
+    public string FormatEvent(LogLevel level, string loggerName, string logEvent, DateTime? dateTime)
+    {
+        return FormatEvent(level.Name, loggerName, logEvent, dateTime);
+    }
+    
+    /// <summary>
+    /// Generates a formatted <see cref="Logger"/> event using this <see cref="LogStyle"/> instance.
+    /// </summary>
+    /// <param name="level">The name of the <see cref="LogLevel"/> of the event.</param>
+    /// <param name="loggerName">The name of the logger.</param>
+    /// <param name="logEvent">The string body of the event.</param>
+    /// <returns>The formatted string output.</returns>
+    /// <exception cref="FormatException"><see cref="Data"/> is invalid.</exception>
+    public string FormatEvent(string level, string loggerName, string logEvent)
+    {
+        return FormatEvent(level, loggerName, logEvent, null);
+    }
+    
+    /// <summary>
+    /// Generates a formatted <see cref="Logger"/> event using this <see cref="LogStyle"/> instance.
+    /// </summary>
+    /// <param name="level">The <see cref="LogLevel"/> of the event.</param>
+    /// <param name="loggerName">The name of the logger.</param>
+    /// <param name="logEvent">The string body of the event.</param>
     /// <returns>The formatted string output.</returns>
     /// <exception cref="FormatException"><see cref="Data"/> is invalid.</exception>
     public string FormatEvent(LogLevel level, string loggerName, string logEvent)
     {
-        return FormatEvent(level.Name, loggerName, logEvent);
+        return FormatEvent(level.Name, loggerName, logEvent, null);
     }
 
     public static implicit operator LogStyle(string input) => new(input);
