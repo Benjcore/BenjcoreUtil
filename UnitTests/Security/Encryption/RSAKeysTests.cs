@@ -75,7 +75,7 @@ public class RSAKeysTests
         byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public class RSAKeysTests
         byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
     }
 
     [Fact]
@@ -103,7 +103,7 @@ public class RSAKeysTests
         keys.UpdateKeys();
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
     }
 
     [Fact]
@@ -117,7 +117,7 @@ public class RSAKeysTests
         await keys.UpdateKeysAsync();
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
     }
 
     [Fact]
@@ -403,7 +403,7 @@ public class RSAKeysTests
         byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
     }
 
     [Fact]
@@ -417,7 +417,7 @@ public class RSAKeysTests
         byte[] encrypted = RSAKeys.Encrypt(TestString, rightKeys.PublicKey);
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, wrongKeys.PrivateKey));
     }
 
     [Fact]
@@ -431,7 +431,7 @@ public class RSAKeysTests
         keys.UpdateKeys();
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
     }
 
     [Fact]
@@ -445,7 +445,7 @@ public class RSAKeysTests
         await keys.UpdateKeysAsync();
 
         // Assert
-        Assert.Throws<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
+        Assert.ThrowsAny<CryptographicException>(() => RSAKeys.Decrypt(encrypted, keys.PrivateKey));
     }
 
     [Fact]
