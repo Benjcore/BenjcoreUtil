@@ -32,7 +32,7 @@ namespace BenjcoreUtil.Logging;
 /// <c>"[%l] %t{yy/MM/dd HH:mm:ss} : "</c> may output :<br/>
 /// <c>"[INFO] 98/01/05 16:05:35 : *Log Event Message*"</c>
 /// </example>
-public struct LogStyle
+public readonly struct LogStyle
 {
     /// <summary>
     /// A sample <see cref="LogStyle"/> using the metric Day / Month / Year format.
@@ -84,12 +84,12 @@ public struct LogStyle
     /// <summary>
     /// Generates a formatted <see cref="Logger"/> event using this <see cref="LogStyle"/> instance.
     /// </summary>
-    /// <param name="level">The <see cref="LogLevel"/> of the event.</param>
+    /// <param name="level">The name of the <see cref="LogLevel"/> of the event.</param>
     /// <param name="loggerName">The name of the logger.</param>
     /// <param name="logEvent">The string body of the event.</param>
     /// <returns>The formatted string output.</returns>
     /// <exception cref="FormatException"><see cref="Data"/> is invalid.</exception>
-    public string FormatEvent(LogLevel level, string loggerName, string logEvent)
+    public string FormatEvent(string level, string loggerName, string logEvent)
     {
         StringBuilder sb = new StringBuilder();
 
@@ -109,7 +109,7 @@ public struct LogStyle
                             break;
 
                         case 'l':
-                            sb.Append(funcL.Invoke(level));
+                            sb.Append(level);
                             break;
 
                         case 'n':
@@ -133,7 +133,7 @@ public struct LogStyle
                                 i++;
                             }
 
-                            sb.Append(funcT.Invoke(sb2.ToString()));
+                            sb.Append(DateTime.Now.ToString(sb2.ToString()));
 
                             break;
                         }
@@ -158,10 +158,19 @@ public struct LogStyle
         sb.Append('\n');
         return sb.ToString();
     }
-
-    // Functions for GetString method.
-    private Func<string, string> funcT = s => DateTime.Now.ToString(s);
-    private Func<LogLevel, string> funcL = lvl => lvl.Name;
+    
+    /// <summary>
+    /// Generates a formatted <see cref="Logger"/> event using this <see cref="LogStyle"/> instance.
+    /// </summary>
+    /// <param name="level">The <see cref="LogLevel"/> of the event.</param>
+    /// <param name="loggerName">The name of the logger.</param>
+    /// <param name="logEvent">The string body of the event.</param>
+    /// <returns>The formatted string output.</returns>
+    /// <exception cref="FormatException"><see cref="Data"/> is invalid.</exception>
+    public string FormatEvent(LogLevel level, string loggerName, string logEvent)
+    {
+        return FormatEvent(level.Name, loggerName, logEvent);
+    }
 
     public static implicit operator LogStyle(string input) => new(input);
 }
