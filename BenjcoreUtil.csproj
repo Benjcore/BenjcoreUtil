@@ -1,35 +1,51 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+    
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <PackageId>BenjcoreUtil</PackageId>
         <Nullable>enable</Nullable>
+        <Authors>Benj_2005</Authors>
         <Company>Benjcore</Company>
-        <AssemblyVersion>2.0.3</AssemblyVersion>
-        <FileVersion>2.0.3.0</FileVersion>
+        <Version>2.1.0</Version>
+        <AssemblyVersion>2.1.0</AssemblyVersion>
+        <FileVersion>2.1.0.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2022</Copyright>
-        <NoWarn>1591</NoWarn>
+        <PackageLicense>https://github.com/Benjcore/BenjcoreUtil/blob/master/LICENSE</PackageLicense>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeDebugSymbolsProjectOutputGroup>true</IncludeDebugSymbolsProjectOutputGroup>
+        <IncludeSourceFilesProjectOutputGroup>true</IncludeSourceFilesProjectOutputGroup>
+        <IsPackable>true</IsPackable>
+        <RepositoryUrl>https://github.com/Benjcore/BenjcoreUtil</RepositoryUrl>
+        <NoWarn>CS1591, NU5100</NoWarn>
     </PropertyGroup>
-
+    
     <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-      <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
-      <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     </ItemGroup>
-
+    
     <ItemGroup>
-      <Compile Remove="UnitTests\**" />
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UnitTests</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
-
+    
     <ItemGroup>
-      <EmbeddedResource Remove="UnitTests\**" />
+        <Compile Remove="UnitTests\**" />
+        <Compile Remove="IntegrationTests\**" />
     </ItemGroup>
-
+    
     <ItemGroup>
-      <None Remove="UnitTests\**" />
+        <EmbeddedResource Remove="UnitTests\**" />
+        <EmbeddedResource Remove="IntegrationTests\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Remove="UnitTests\**" />
+        <None Remove="IntegrationTests\**" />
     </ItemGroup>
 
 </Project>

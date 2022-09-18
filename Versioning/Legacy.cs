@@ -1,12 +1,69 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+/*
+ * The code in this file is deprecated and does not need to conform to the style of the rest of the code.
+ */
+
 namespace BenjcoreUtil.Versioning; 
+
+/// <summary>
+/// Interface for BenjcoreUtil Version Types.
+/// </summary>
+/// <remarks>
+/// <b>IVersionType is obsolete. Use <see cref="IVersion"/> instead.</b>
+/// </remarks>
+[Obsolete("IVersionType is obsolete. Use IVersion instead.")]
+public interface IVersionType<in Self> {
+
+    /// <summary>
+    /// Checks if the version is newer than another version.
+    /// </summary>
+    /// <param name="input">The version object you wish to compare.</param>
+    /// <returns>Boolean Result</returns>
+    bool isNewerThan(Self input);
+  
+    /// <summary>
+    /// Checks if the version is newer than or equal to than another version.
+    /// </summary>
+    /// <param name="input">The version object you wish to compare.</param>
+    /// <returns>Boolean Result</returns>
+    bool isNewerThanOrEqualTo(Self input);
+  
+    /// <summary>
+    /// Checks if the version is older than another version.
+    /// </summary>
+    /// <param name="input">The version object you wish to compare.</param>
+    /// <returns>Boolean Result</returns>
+    bool isOlderThan(Self input);
+  
+    /// <summary>
+    /// Checks if the version is older than or equal to than another version.
+    /// </summary>
+    /// <param name="input">The version object you wish to compare.</param>
+    /// <returns>Boolean Result</returns>
+    bool isOlderThanOrEqualTo(Self input);
+  
+    /// <summary>
+    /// Checks if the version is equal to than another version.
+    /// </summary>
+    /// <param name="input">The version object you wish to compare.</param>
+    /// <returns>Boolean Result</returns>
+    bool IsEqualTo(Self input);
+
+    /// <returns>A string representing the version object.</returns>
+    string? ToString();
+
+}
 
 /// <summary>
 /// A simple X.Y.Z versioning system that can have as many sections as you like.
 /// Can be wrapped in a <see cref="Version"/> object.
 /// </summary>
+/// <remarks>
+/// <b>Simple is obsolete. Use <see cref="SimpleVersion"/> instead.</b>
+/// </remarks>
+[Obsolete("Simple is obsolete. Use SimpleVersion instead.")]
 public class Simple : IVersionType<object> {
 
   /// <summary>
@@ -277,6 +334,133 @@ public class Simple : IVersionType<object> {
       return false;
     }
 
+  }
+  
+}
+
+/// <summary>
+/// A wrapper class for classes that implement the <see cref="IVersionType{Self}"/> in most cases using this class
+/// rather than the class of the specific version type (eg <see cref="Simple"/>) will improve code readability.
+/// </summary>
+/// <remarks>
+/// The inner object wrapped by this class can be referenced using the <see cref="InnerObject"/> property.<br/><br/>
+/// <b>
+/// This class is obsolete. Use the <see cref="IVersion"/> interface instead or refer to the inner object directly.
+/// </b>
+/// </remarks>
+[Obsolete("Use the IVersion interface instead or refer to the inner object directly.")]
+public class Version : IVersionType<Version> {
+  
+  /// <summary>
+  /// The inner <see cref="IVersionType{Self}"/> object wrapped by the current <see cref="Version"/> object.
+  /// </summary>
+  public IVersionType<object> InnerObject { get; }
+
+  /// <summary>
+  /// Creates a new instance of the <see cref="Version"/> class.
+  /// </summary>
+  /// <param name="VersionType">An object that implements <see cref="IVersionType{Self}"/>.
+  /// This will dictate the type and value of the <see cref="Version"/>.</param>
+  /// <exception cref="VersioningException">
+  /// <paramref name="VersionType"/> does not implement <see cref="IVersionType{Self}"/>.
+  /// </exception>
+  public Version(object VersionType) {
+
+    // Ensure VersionType implements IVersionType
+    if (VersionType is not IVersionType<object> type) {
+      throw new VersioningException("Parameter does not implement IVersionType<T>." + 
+                                    $"\nGiven : {VersionType.GetType().ToString()}");
+    }
+
+    InnerObject = type;
+
+  }
+
+  /// <summary>
+  /// Checks whether the current object is newer than <paramref name="input"/>.
+  /// </summary>
+  /// <param name="input">The object you wish to compare to the current object.</param>
+  /// <returns>
+  /// True if the current object is newer than <paramref name="input"/>, otherwise false.
+  /// </returns>
+  /// <exception cref="VersioningException">Can be thrown by <see cref="InnerObject"/>.</exception>
+  public bool isNewerThan(Version input) {
+    return InnerObject.isNewerThan(input.InnerObject);
+  }
+
+  /// <summary>
+  /// Checks whether the current object is newer than or equal to <paramref name="input"/>.
+  /// </summary>
+  /// <param name="input">The object you wish to compare to the current object.</param>
+  /// <returns>
+  /// True if the current object is newer than or equal to <paramref name="input"/>, otherwise false.
+  /// </returns>
+  /// <exception cref="VersioningException">Can be thrown by <see cref="InnerObject"/>.</exception>
+  public bool isNewerThanOrEqualTo(Version input) {
+    return InnerObject.isNewerThanOrEqualTo(input.InnerObject);
+  }
+
+  /// <summary>
+  /// Checks whether the current object is older than <paramref name="input"/>.
+  /// </summary>
+  /// <param name="input">The object you wish to compare to the current object.</param>
+  /// <returns>
+  /// True if the current object is older than <paramref name="input"/>, otherwise false.
+  /// </returns>
+  /// <exception cref="VersioningException">Can be thrown by <see cref="InnerObject"/>.</exception>
+  public bool isOlderThan(Version input) {
+    return InnerObject.isOlderThan(input.InnerObject);
+  }
+
+  /// <summary>
+  /// Checks whether the current object is older than or equal to <paramref name="input"/>.
+  /// </summary>
+  /// <param name="input">The object you wish to compare to the current object.</param>
+  /// <returns>
+  /// True if the current object is older than or equal to <paramref name="input"/>, otherwise false.
+  /// </returns>
+  /// <exception cref="VersioningException">Can be thrown by <see cref="InnerObject"/>.</exception>
+  public bool isOlderThanOrEqualTo(Version input) {
+    return InnerObject.isOlderThanOrEqualTo(input.InnerObject);
+  }
+
+  /// <summary>
+  /// Checks whether the current object is equal to <paramref name="input"/>.
+  /// </summary>
+  /// <param name="input">The object you wish to compare to the current object.</param>
+  /// <returns>
+  /// True if the current object is is equal to <paramref name="input"/>, otherwise false.
+  /// </returns>
+  /// <exception cref="VersioningException">Can be thrown by <see cref="InnerObject"/>.</exception>
+  public bool IsEqualTo(Version input) {
+    return InnerObject.IsEqualTo(input.InnerObject);
+  }
+  
+  // Operators
+  public static explicit operator string?(Version input) => input.ToString();
+  public static bool operator ==(Version x, Version y) { return x.IsEqualTo(y); }
+  public static bool operator !=(Version x, Version y) { return !x.IsEqualTo(y); }
+  public static bool operator >(Version x, Version y) { return x.isNewerThan(y); }
+  public static bool operator <(Version x, Version y) { return x.isOlderThan(y); }
+  public static bool operator >=(Version x, Version y) { return x.isNewerThanOrEqualTo(y); }
+  public static bool operator <=(Version x, Version y) { return x.isOlderThanOrEqualTo(y); }
+
+  public override string? ToString() {
+    return InnerObject.ToString();
+  }
+  
+  public override bool Equals(object? obj) {
+    
+    if (obj is Version version) {
+      return InnerObject.Equals(version.InnerObject);
+    }
+    
+    return false;
+    
+  }
+
+  public override int GetHashCode() {
+    return InnerObject.GetHashCode();
   }
   
 }

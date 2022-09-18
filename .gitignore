@@ -6,6 +6,8 @@
 /.vscode/
 /UnitTests/bin/
 /UnitTests/obj/
+/IntegrationTests/bin/
+/IntegrationTests/obj/
 
 
 # Files
