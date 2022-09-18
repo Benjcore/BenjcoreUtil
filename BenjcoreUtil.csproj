@@ -5,12 +5,16 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <PackageId>BenjcoreUtil</PackageId>
         <Nullable>enable</Nullable>
+        <Authors>Benj_2005</Authors>
         <Company>Benjcore</Company>
+        <Version>2.0.3</Version>
         <AssemblyVersion>2.0.3</AssemblyVersion>
         <FileVersion>2.0.3.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2022</Copyright>
+        <PackageLicenseUrl>https://github.com/Benjcore/BenjcoreUtil/blob/master/LICENSE</PackageLicenseUrl>
         <NoWarn>1591</NoWarn>
     </PropertyGroup>
     
