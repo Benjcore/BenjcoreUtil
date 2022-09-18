@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenjcoreUtil", "BenjcoreUti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{E1725E3D-9F40-4C5A-96BE-4B9D2EE90176}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{AD3BF012-7E54-4A8F-B9D7-AE8F413A79F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{E1725E3D-9F40-4C5A-96BE-4B9D2EE90176}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1725E3D-9F40-4C5A-96BE-4B9D2EE90176}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1725E3D-9F40-4C5A-96BE-4B9D2EE90176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3BF012-7E54-4A8F-B9D7-AE8F413A79F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3BF012-7E54-4A8F-B9D7-AE8F413A79F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3BF012-7E54-4A8F-B9D7-AE8F413A79F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3BF012-7E54-4A8F-B9D7-AE8F413A79F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
