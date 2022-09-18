@@ -1,4 +1,5 @@
 # BenjcoreUtil
+[![NuGet](https://img.shields.io/nuget/vpre/BenjcoreUtil.svg)](https://www.nuget.org/packages/BenjcoreUtil)
 
 ### What is it?
 
