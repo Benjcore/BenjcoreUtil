@@ -14,8 +14,13 @@
         <FileVersion>2.1.0.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2022</Copyright>
-        <PackageLicenseUrl>https://github.com/Benjcore/BenjcoreUtil/blob/master/LICENSE</PackageLicenseUrl>
-        <NoWarn>1591</NoWarn>
+        <PackageLicense>https://github.com/Benjcore/BenjcoreUtil/blob/master/LICENSE</PackageLicense>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeDebugSymbolsProjectOutputGroup>true</IncludeDebugSymbolsProjectOutputGroup>
+        <IncludeSourceFilesProjectOutputGroup>true</IncludeSourceFilesProjectOutputGroup>
+        <IsPackable>true</IsPackable>
+        <RepositoryUrl>https://github.com/Benjcore/BenjcoreUtil</RepositoryUrl>
+        <NoWarn>CS1591, NU5100</NoWarn>
     </PropertyGroup>
     
     <ItemGroup>
