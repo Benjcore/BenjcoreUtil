@@ -9,9 +9,9 @@
         <Nullable>enable</Nullable>
         <Authors>Benj_2005</Authors>
         <Company>Benjcore</Company>
-        <Version>2.0.3</Version>
-        <AssemblyVersion>2.0.3</AssemblyVersion>
-        <FileVersion>2.0.3.0</FileVersion>
+        <Version>2.1.0</Version>
+        <AssemblyVersion>2.1.0</AssemblyVersion>
+        <FileVersion>2.1.0.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2022</Copyright>
         <PackageLicenseUrl>https://github.com/Benjcore/BenjcoreUtil/blob/master/LICENSE</PackageLicenseUrl>
