@@ -9,9 +9,9 @@
         <Nullable>enable</Nullable>
         <Authors>Benj_2005</Authors>
         <Company>Benjcore</Company>
-        <Version>2.1.0</Version>
-        <AssemblyVersion>2.1.0</AssemblyVersion>
-        <FileVersion>2.1.0.0</FileVersion>
+        <Version>2.1.1</Version>
+        <AssemblyVersion>2.1.1</AssemblyVersion>
+        <FileVersion>2.1.1.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2022</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -21,6 +21,8 @@
         <IsPackable>true</IsPackable>
         <RepositoryUrl>https://github.com/Benjcore/BenjcoreUtil</RepositoryUrl>
         <NoWarn>CS1591, NU5100</NoWarn>
+        <PackageTags>utilities logger logging versioning hashing</PackageTags>
+        <PackageReleaseNotes>Remove Unused Dependency</PackageReleaseNotes>
     </PropertyGroup>
     
     <ItemGroup>
