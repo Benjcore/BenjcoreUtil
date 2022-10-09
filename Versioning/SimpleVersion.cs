@@ -345,7 +345,7 @@ public class SimpleVersion : IVersion
     /// <exception cref="ArgumentNullException">input is null or empty.</exception>
     /// <exception cref="FormatException">input is not in the correct format.</exception>
     /// <exception cref="OverflowException">A number in input is not within
-    /// the 32-Bit signed integer limits.</exception>
+    /// the 32-Bit signed integer limit.</exception>
     /// <remarks>input may begin with a 'v' (case insensitive) for styling.
     /// The 'v' will be ignored.</remarks>
     public static SimpleVersion Parse([NotNull] string? input)
