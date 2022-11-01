@@ -338,10 +338,10 @@ public class SimpleVersion : IVersion
     }
 
     /// <summary>
-    /// Converts the string representation of a SimpleVersion version number to its SimpleVersion object equivalent.
+    /// Converts the string representation of a SimpleVersion number to its SimpleVersion object equivalent.
     /// </summary>
     /// <param name="input">A string containing numbers separated by periods to convert. e.g. "1.2.9".</param>
-    /// <returns>A SimpleVersion version equivalent to the string s.</returns>
+    /// <returns>A SimpleVersion equivalent of <paramref name="input"/>.</returns>
     /// <exception cref="ArgumentNullException">input is null or empty.</exception>
     /// <exception cref="FormatException">input is not in the correct format.</exception>
     /// <exception cref="OverflowException">A number in input is not within
@@ -370,12 +370,12 @@ public class SimpleVersion : IVersion
     }
 
     /// <summary>
-    /// Converts the string representation of a SimpleVersion version number to its SimpleVersion version object equivalent.
+    /// Converts the string representation of a SimpleVersion number to its SimpleVersion object equivalent.
     /// <br></br>A return value indicates whether the conversion succeeded.
     /// </summary>
     /// <param name="input">A string containing numbers separated by periods to convert. e.g. "1.2.9".</param>
-    /// <param name="result">When this method returns, contains the SimpleVersion version object equivalent of
-    /// the string input, if the conversion succeeded, or null if the conversion failed.</param>
+    /// <param name="result">When this method returns, contains the SimpleVersion equivalent of the string
+    /// <paramref name="input"/>, if the conversion succeeded, or null if the conversion failed.</param>
     /// <returns>true if input was converted successfully; otherwise, false.</returns>
     /// <remarks>input may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
     public static bool TryParse([NotNullWhen(true)] string? input, out SimpleVersion? result)
