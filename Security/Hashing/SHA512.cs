@@ -12,7 +12,7 @@ public static class SHA512
     /// Default text encoding to use if none is specified.
     /// </summary>
     public static Encoding DefaultEncoding = Encoding.UTF8;
-
+    
     /// <summary>
     /// Gets the SHA512 Hash of the given input.
     /// </summary>
@@ -28,7 +28,7 @@ public static class SHA512
         byte[] inputBin = encoding.GetBytes(input);
         return GetSHA512(inputBin);
     }
-
+    
     /// <summary>
     /// Gets the SHA512 Hash of the given input.
     /// </summary>
@@ -40,12 +40,12 @@ public static class SHA512
         {
             byte[] binResult = sha1.ComputeHash(input);
             StringBuilder sb = new StringBuilder();
-
+            
             foreach (byte item in binResult)
             {
                 sb.Append(item.ToString("X2"));
             }
-
+            
             return sb.ToString();
         }
     }

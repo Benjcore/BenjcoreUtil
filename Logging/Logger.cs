@@ -14,28 +14,28 @@ public class Logger : IDisposable
     /// If null, <see cref="File">System.IO.File</see> will be used instead.
     /// </summary>
     public StreamWriter? StreamWriter { get; } = null;
-
+    
     /// <summary>
     /// An Array of <see cref="LogLevel">LogLevels</see> that this <see cref="Logger"/> object can use.
     /// </summary>
     public LogLevel[] Levels { get; }
-
+    
     /// <summary>
     /// The <see cref="LogStyle"/> that this <see cref="Logger"/> object should use.
     /// </summary>
     public LogStyle Style { get; }
-
+    
     /// <summary>
     /// A string representing the path of the file that the <see cref="Logger"/> should output to.
     /// If null, then the <see cref="Logger"/> will not log to a file regardless of the <see cref="LogLevel"/>.
     /// </summary>
     public string? LogFile { get; }
-
+    
     /// <summary>
     /// A string representing the name of the logger which can be referenced by <see cref="LogStyle"/>.
     /// </summary>
     public string Name { get; }
-
+    
     /// <summary>
     /// Creates a new <see cref="Logger"/> instance.
     /// </summary>
@@ -67,32 +67,32 @@ public class Logger : IDisposable
         Style = style;
         LogFile = logFile;
         Name = name ?? "Logger";
-
+        
         // Create a list of level severities.
-        List<int> levelSeverities = new();
+        List<int> levelSeverities = [];
         foreach (var item in Levels) levelSeverities.Add(item.Severity);
-
+        
         // Create a list of level names.
-        List<string> levelNames = new();
+        List<string> levelNames = [];
         foreach (var item in Levels) levelNames.Add(item.Name.ToUpper());
-
+        
         // Ensure there is at least one LogLevel.
         if (levels.Length < 1)
             throw new ArgumentException("Empty array detected.", nameof(levels));
-
+        
         // Using the list of level severities,
         // ensure all levels are of a different severity level.
         if (levelSeverities.Distinct().Count() != levelSeverities.Count)
             throw new ArgumentException("Duplicate severity values detected.", nameof(levels));
-
+        
         // Using the list of level severities,
         // ensure all levels have different names.
         if (levelNames.Distinct().Count() != levelNames.Count)
             throw new ArgumentException("Duplicate level names detected.", nameof(levels));
-
+        
         // Delete logFile if it already exists.
         if (File.Exists(logFile)) File.Delete(logFile);
-
+        
         // Initialize StreamWriter if singleStream is true,
         // else it will stay as null.
         if (singleStream && logFile is not null)
@@ -111,7 +111,7 @@ public class Logger : IDisposable
     public void Log(string levelName, string message)
     {
         LogLevel level;
-
+        
         try
         {
             // Figure out LogLevel based on levelName.
@@ -124,11 +124,11 @@ public class Logger : IDisposable
         {
             throw new ArgumentException($"Could not find LogLevel with the name '{levelName}'.", nameof(levelName), e);
         }
-
+        
         // Call Log(LogLevel, string)
         Log(level, message);
     }
-
+    
     /// <summary>
     /// Logs an event in the <see cref="Logger"/>.
     /// </summary>
@@ -142,7 +142,7 @@ public class Logger : IDisposable
         foreach (var item in Levels)
         {
             if (item.GetHashCode() == level.GetHashCode()) break; // Break if level is in Levels.
-
+            
             // If the loop reaches the end and
             // hasn't found level.
             if (item.Equals(Levels[^1]))
@@ -150,9 +150,9 @@ public class Logger : IDisposable
                 throw new ArgumentException($"{level.Name} is not in {Name}.{nameof(Levels)}", nameof(level));
             }
         }
-
+        
         string? formattedMessage = null;
-
+        
         // Call level Function
         if (level.Function is not null)
         {
@@ -166,15 +166,15 @@ public class Logger : IDisposable
                 level.Function.Invoke(formattedMessage);
             }
         }
-
+        
         // Return early if Log and Print are false.
-        if (!level.Log && !level.Print) return;
-
+        if (level is { Log: false, Print: false }) return;
+        
         if (String.IsNullOrEmpty(formattedMessage))
         {
             formattedMessage = Style.FormatEvent(level, Name, message);
         }
-
+        
         if (level.Log && LogFile is not null)
         {
             if (StreamWriter is null)
@@ -188,13 +188,13 @@ public class Logger : IDisposable
                 StreamWriter.WriteAsync(formattedMessage);
             }
         }
-
+        
         if (level.Print)
         {
             Console.WriteLine(formattedMessage);
         }
     }
-
+    
     /// <summary>
     /// Asynchronously logs an event in the <see cref="Logger"/>.
     /// </summary>
@@ -208,7 +208,7 @@ public class Logger : IDisposable
         task.Start(); // Start Task
         await task; // Await Completion
     }
-
+    
     /// <summary>
     /// Asynchronously logs an event in the <see cref="Logger"/>.
     /// </summary>
@@ -222,32 +222,32 @@ public class Logger : IDisposable
         task.Start(); // Start Task
         await task; // Await Completion
     }
-
+    
     //
     // IDisposable Implementation
     //
-
+    
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     ~Logger()
     {
         Dispose(false);
     }
-
+    
     private void ReleaseUnmanagedResources()
     {
         StreamWriter?.Close();
     }
-
+    
     private void Dispose(bool disposing)
     {
         ReleaseUnmanagedResources();
-
+        
         if (disposing)
         {
             StreamWriter?.Dispose();
         }
     }
-
+    
     public void Dispose()
     {
         Dispose(true);

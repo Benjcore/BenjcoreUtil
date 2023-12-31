@@ -12,7 +12,7 @@ public static class SHA1
     /// Default text encoding to use if none is specified.
     /// </summary>
     public static Encoding DefaultEncoding = Encoding.UTF8;
-
+    
     /// <summary>
     /// Gets the SHA1 Hash of the given input.
     /// </summary>
@@ -24,11 +24,11 @@ public static class SHA1
     {
         // Sets encoding to the value of DefaultEncoding if the encoding isn't specified.
         encoding ??= DefaultEncoding;
-
+        
         byte[] inputBin = encoding.GetBytes(input);
         return GetSHA1(inputBin);
     }
-
+    
     /// <summary>
     /// Gets the SHA1 Hash of the given input.
     /// </summary>
@@ -40,12 +40,12 @@ public static class SHA1
         {
             byte[] binResult = sha1.ComputeHash(input);
             StringBuilder sb = new StringBuilder();
-
+            
             foreach (byte item in binResult)
             {
                 sb.Append(item.ToString("X2"));
             }
-
+            
             return sb.ToString();
         }
     }
