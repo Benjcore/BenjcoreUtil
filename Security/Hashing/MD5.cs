@@ -36,17 +36,14 @@ public static class MD5
     /// <returns>The MD5 hash of the input.</returns>
     public static string GetMD5(byte[] input)
     {
-        using (Crypt.MD5 md5 = Crypt.MD5.Create())
+        byte[] binResult = Crypt.MD5.HashData(input);
+        StringBuilder sb = new StringBuilder();
+        
+        foreach (byte item in binResult)
         {
-            byte[] binResult = md5.ComputeHash(input);
-            StringBuilder sb = new StringBuilder();
-            
-            foreach (byte item in binResult)
-            {
-                sb.Append(item.ToString("X2"));
-            }
-            
-            return sb.ToString();
+            sb.Append(item.ToString("X2"));
         }
+        
+        return sb.ToString();
     }
 }
