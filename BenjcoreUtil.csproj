@@ -13,7 +13,7 @@
         <AssemblyVersion>2.1.1</AssemblyVersion>
         <FileVersion>2.1.1.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
-        <Copyright>Copyright © Benj_2005 / Benjcore 2022</Copyright>
+        <Copyright>Copyright © Benj_2005 / Benjcore 2024</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeDebugSymbolsProjectOutputGroup>true</IncludeDebugSymbolsProjectOutputGroup>
