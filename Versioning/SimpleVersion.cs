@@ -56,13 +56,14 @@ public class SimpleVersion : IVersion
     /// </summary>
     /// <param name="input">The object you wish to compare to the current object.</param>
     /// <returns>
-    /// A <see cref="VersionComparisonResult"/> indicating the result of the comparison.
+    /// A tuple where the first bool indicates whether or not the current instance is newer than the other,
+    /// and the second bool indicates whether or not the current instance is equal to the other.
     /// </returns>
     /// <exception cref="VersioningException">
     /// Thrown when <paramref name="input"/> and the current object are different lengths while
     /// <see cref="AllowDifferentLengthComparisons"/> is false.
     /// </exception>
-    internal VersionComparisonResult Calculate(SimpleVersion input)
+    internal (bool NewerThan, bool EqualTo) Calculate(SimpleVersion input)
     {
         SimpleVersion current = new(Data);
         
@@ -125,11 +126,7 @@ public class SimpleVersion : IVersion
             }
         }
         
-        return new VersionComparisonResult
-        {
-            GreaterThan = greaterThan,
-            EqualTo = equalTo
-        };
+        return (greaterThan, equalTo);
     }
     
     /// <summary>
@@ -149,7 +146,7 @@ public class SimpleVersion : IVersion
         }
         
         var result = Calculate(version);
-        return result is { GreaterThan: true, EqualTo: false };
+        return result.NewerThan;
     }
     
     /// <summary>
@@ -169,7 +166,7 @@ public class SimpleVersion : IVersion
         }
         
         var result = Calculate(version);
-        return result.GreaterThan || result.EqualTo;
+        return result.NewerThan || result.EqualTo;
     }
     
     /// <summary>
@@ -189,7 +186,7 @@ public class SimpleVersion : IVersion
         }
         
         var result = Calculate(version);
-        return result is { GreaterThan: false, EqualTo: false };
+        return result is { NewerThan: false, EqualTo: false };
     }
     
     /// <summary>
@@ -209,7 +206,7 @@ public class SimpleVersion : IVersion
         }
         
         var result = Calculate(version);
-        return !result.GreaterThan || result.EqualTo;
+        return !result.NewerThan || result.EqualTo;
     }
     
     /// <summary>
@@ -389,15 +386,6 @@ public class SimpleVersion : IVersion
             return false;
         }
     }
-}
-
-/// <summary>
-/// A record struct representing the result of a comparison between two SimpleVersion objects.
-/// </summary>
-internal record struct VersionComparisonResult
-{
-    public bool GreaterThan { get; init; }
-    public bool EqualTo { get; init; }
 }
 
 /// <summary>
