@@ -7,7 +7,7 @@ namespace BenjcoreUtil.Versioning;
 /// <summary>
 /// A SimpleVersion X.Y.Z versioning system that can have as many sections as you like.
 /// </summary>
-public class SimpleVersion : IVersion
+public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
 {
     /// <summary>
     /// Dictates whether or not the current object can be compared with a <see cref="SimpleVersion"/> of a different length.
@@ -332,17 +332,8 @@ public class SimpleVersion : IVersion
         return sb.ToString().GetHashCode();
     }
     
-    /// <summary>
-    /// Converts the string representation of a SimpleVersion number to its SimpleVersion object equivalent.
-    /// </summary>
-    /// <param name="input">A string containing numbers separated by periods to convert. e.g. "1.2.9".</param>
-    /// <returns>A SimpleVersion equivalent of <paramref name="input"/>.</returns>
-    /// <exception cref="ArgumentNullException">input is null or empty.</exception>
-    /// <exception cref="FormatException">input is not in the correct format.</exception>
-    /// <exception cref="OverflowException">A number in input is not within
-    /// the 32-Bit signed integer limit.</exception>
-    /// <remarks>input may begin with a 'v' (case insensitive) for styling.
-    /// The 'v' will be ignored.</remarks>
+    /// <inheritdoc cref="IParseableVersion{TSelf}.Parse"/>
+    /// <remarks><paramref name="input"/> may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
     public static SimpleVersion Parse([NotNull] string? input)
     {
         if (input is null || input.Length < 1)
@@ -364,27 +355,12 @@ public class SimpleVersion : IVersion
         return new SimpleVersion(data);
     }
     
-    /// <summary>
-    /// Converts the string representation of a SimpleVersion number to its SimpleVersion object equivalent.
-    /// <br></br>A return value indicates whether the conversion succeeded.
-    /// </summary>
-    /// <param name="input">A string containing numbers separated by periods to convert. e.g. "1.2.9".</param>
-    /// <param name="result">When this method returns, contains the SimpleVersion equivalent of the string
-    /// <paramref name="input"/>, if the conversion succeeded, or null if the conversion failed.</param>
-    /// <returns>true if input was converted successfully; otherwise, false.</returns>
-    /// <remarks>input may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+    /// <inheritdoc cref="IParseableVersion{TSelf}.TryParse"/>
+    /// <remarks><paramref name="input"/> may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
     public static bool TryParse([NotNullWhen(true)] string? input, out SimpleVersion? result)
     {
-        try
-        {
-            result = Parse(input);
-            return true;
-        }
-        catch (Exception e) when (e is ArgumentNullException or FormatException or OverflowException)
-        {
-            result = null;
-            return false;
-        }
+        // Call this default implementation, which will call SimpleVersion.Parse().
+        return IParseableVersion<SimpleVersion>.TryParse(input, out result);
     }
 }
 
