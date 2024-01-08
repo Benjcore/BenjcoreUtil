@@ -208,6 +208,14 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
         return new PreviewVersion(simple_version, branch_revision, x => x.First(b => b.Suffix == branch_suffix));
     }
     
+    /// <inheritdoc cref="IParseableVersion{TSelf}.TryParse"/>
+    /// <remarks><paramref name="input"/> may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+    public static bool TryParse([NotNullWhen(true)] string? input, out PreviewVersion? result)
+    {
+        // Call this default implementation, which will call SimpleVersion.Parse().
+        return IParseableVersion<PreviewVersion>.TryParse(input, out result);
+    }
+    
     public override string ToString()
     {
         if (Branch is null)
