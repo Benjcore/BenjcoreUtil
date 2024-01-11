@@ -50,6 +50,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
             SetComparer(comparer); // Will throw an exception if the comparer is not supported.
         
         SimpleVersion = base_version;
+        SimpleVersion.AllowDifferentLengthComparisons = true;
         Branch = branch_selector.Invoke(Branches);
         
         // If the branch is null, we need to ensure that the branch revision is also null.
