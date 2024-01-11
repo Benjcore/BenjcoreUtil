@@ -8,17 +8,63 @@ namespace BenjcoreUtil.Versioning.Comparison;
 /// When referring to a version comparer, use the interface <see cref="IComparableVersion{TSelf}"/>
 /// (or <see cref="IComparableVersion"/> if you don't need to specify the type), rather than this class.
 /// </remarks>
-public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> where TSelf : IComparableVersion
+public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> where TSelf : ComparableVersionBase<TSelf>
 {
-#pragma warning disable CA1859
-    private IComparableVersion<TSelf> _version_comparer_implementation => this;
-#pragma warning restore CA1859
-    
     public abstract (bool NewerThan, bool EqualTo) Compare(TSelf other);
     
-    public bool IsNewerThan(IVersion input) => _version_comparer_implementation.IsNewerThan(input);
-    public bool IsNewerThanOrEqualTo(IVersion input) => _version_comparer_implementation.IsNewerThanOrEqualTo(input);
-    public bool IsOlderThan(IVersion input) => _version_comparer_implementation.IsOlderThan(input);
-    public bool IsOlderThanOrEqualTo(IVersion input) => _version_comparer_implementation.IsOlderThanOrEqualTo(input);
-    public bool IsEqualTo(IVersion input) => _version_comparer_implementation.IsEqualTo(input);
+    private (bool NewerThan, bool EqualTo) Compare(IVersion other)
+    {
+        // If other is of type `TSelf`, use the comparer.
+        if (other is TSelf comparer)
+        {
+            return Compare(comparer);
+        }
+        
+        throw new ArgumentException("Cannot compare to the given version type.", nameof(other));
+    }
+    
+    /// <inheritdoc cref="IVersion.IsNewerThan"/>
+    /// <throws cref="ArgumentException">
+    /// Thrown when <paramref name="input"/> is not of type the correct type.
+    /// </throws>
+    public bool IsNewerThan(IVersion input) => Compare(input).NewerThan;
+    
+    /// <inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/>
+    /// <throws cref="ArgumentException">
+    /// Thrown when <paramref name="input"/> is not of type the correct type.
+    /// </throws>
+    public bool IsNewerThanOrEqualTo(IVersion input)
+    {
+        // We assign the result to a variable to avoid calling `Compare` twice.
+        var result = Compare(input);
+        return result.NewerThan || result.EqualTo;
+    }
+    
+    /// <inheritdoc cref="IVersion.IsOlderThan"/>
+    /// <throws cref="ArgumentException">
+    /// Thrown when <paramref name="input"/> is not of type the correct type.
+    /// </throws>
+    public bool IsOlderThan(IVersion input)
+    {
+        // We assign the result to a variable to avoid calling `Compare` twice.
+        var result = Compare(input);
+        return result is { NewerThan: false, EqualTo: false };
+    }
+    
+    /// <inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/>
+    /// <throws cref="ArgumentException">
+    /// Thrown when <paramref name="input"/> is not of type the correct type.
+    /// </throws>
+    public bool IsOlderThanOrEqualTo(IVersion input)
+    {
+        // We assign the result to a variable to avoid calling `Compare` twice.
+        var result = Compare(input);
+        return !result.NewerThan || result.EqualTo;
+    }
+    
+    /// <inheritdoc cref="IVersion.IsEqualTo"/>
+    /// <throws cref="ArgumentException">
+    /// Thrown when <paramref name="input"/> is not of type the correct type.
+    /// </throws>
+    public bool IsEqualTo(IVersion input) => Compare(input).EqualTo;
 }
