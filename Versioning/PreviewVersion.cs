@@ -226,4 +226,52 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
         
         return $"{SimpleVersion}-{Branch.Suffix}.{BranchRevision}";
     }
+    
+    /// <inheritdoc cref="object.Equals(object?)"/>
+    /// <remarks>
+    /// <b>NOTE: This method does NOT compare references like object.Equals().</b>
+    /// </remarks>
+    public override bool Equals(object? obj)
+    {
+        if (obj is IVersion version)
+        {
+            return IsEqualTo(version);
+        }
+        
+        return false;
+    }
+    
+    /// <inheritdoc cref="object.GetHashCode"/>
+    /// <remarks>
+    /// <b>NOTE: This method does NOT return the hash code of the reference like object.GetHashCode().</b>
+    /// </remarks>
+    public override int GetHashCode()
+    {
+        return ToString().GetHashCode();
+    }
+    
+#region Operators
+    public static explicit operator string(PreviewVersion input) => input.ToString();
+    
+    public static bool operator ==(PreviewVersion? x, PreviewVersion? y)
+    {
+        if ((object?) y == null)
+        {
+            return (object?) x == null;
+        }
+        
+        if ((object?) x == null)
+        {
+            return false;
+        }
+        
+        return x.IsEqualTo(y);
+    }
+    
+    public static bool operator !=(PreviewVersion? x, PreviewVersion? y) => !(x == y);
+    public static bool operator >(PreviewVersion x, PreviewVersion y) => x.IsNewerThan(y);
+    public static bool operator <(PreviewVersion x, PreviewVersion y) => x.IsOlderThan(y);
+    public static bool operator >=(PreviewVersion x, PreviewVersion y) => x.IsNewerThanOrEqualTo(y);
+    public static bool operator <=(PreviewVersion x, PreviewVersion y) => x.IsOlderThanOrEqualTo(y);
+#endregion
 }
