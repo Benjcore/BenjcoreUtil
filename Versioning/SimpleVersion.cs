@@ -247,30 +247,11 @@ public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
         return x.IsEqualTo(y);
     }
     
-    public static bool operator !=(SimpleVersion? x, SimpleVersion? y)
-    {
-        return !(x == y);
-    }
-    
-    public static bool operator >(SimpleVersion x, SimpleVersion y)
-    {
-        return x.IsNewerThan(y);
-    }
-    
-    public static bool operator <(SimpleVersion x, SimpleVersion y)
-    {
-        return x.IsOlderThan(y);
-    }
-    
-    public static bool operator >=(SimpleVersion x, SimpleVersion y)
-    {
-        return x.IsNewerThanOrEqualTo(y);
-    }
-    
-    public static bool operator <=(SimpleVersion x, SimpleVersion y)
-    {
-        return x.IsOlderThanOrEqualTo(y);
-    }
+    public static bool operator !=(SimpleVersion? x, SimpleVersion? y) => !(x == y);
+    public static bool operator >(SimpleVersion x, SimpleVersion y) => x.IsNewerThan(y);
+    public static bool operator <(SimpleVersion x, SimpleVersion y) => x.IsOlderThan(y);
+    public static bool operator >=(SimpleVersion x, SimpleVersion y) => x.IsNewerThanOrEqualTo(y);
+    public static bool operator <=(SimpleVersion x, SimpleVersion y) => x.IsOlderThanOrEqualTo(y);
 #endregion
     
     public override string ToString()
