@@ -255,15 +255,11 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     
     public static bool operator ==(PreviewVersion? x, PreviewVersion? y)
     {
-        if ((object?) y == null)
-        {
-            return (object?) x == null;
-        }
+        if ((object?) y is null)
+            return (object?) x is null;
         
-        if ((object?) x == null)
-        {
+        if ((object?) x is null)
             return false;
-        }
         
         return x.IsEqualTo(y);
     }

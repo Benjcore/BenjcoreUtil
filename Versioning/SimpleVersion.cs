@@ -234,15 +234,11 @@ public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
     
     public static bool operator ==(SimpleVersion? x, SimpleVersion? y)
     {
-        if ((object?) y == null)
-        {
-            return (object?) x == null;
-        }
+        if ((object?) y is null)
+            return (object?) x is null;
         
-        if ((object?) x == null)
-        {
+        if ((object?) x is null)
             return false;
-        }
         
         return x.IsEqualTo(y);
     }
