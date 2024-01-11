@@ -150,11 +150,11 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
         
         // If both versions are full releases, then we just compare them as SimpleVersions.
         if (Branch is null && other.Branch is null)
-            return (IsNewerThan(other), IsEqualTo(other));
+            return (SimpleVersion.IsNewerThan(other.SimpleVersion), SimpleVersion.IsEqualTo(other.SimpleVersion));
         
         // If the underlying SimpleVersions are different, we just need to check which one is newer.
         if (!SimpleVersion.IsEqualTo(other.SimpleVersion))
-            return (IsNewerThan(other), false);
+            return (SimpleVersion.IsNewerThan(other.SimpleVersion), false);
         
         // If the underlying SimpleVersions are the same, but the branches are different,
         // then the version who's branch level is lower, is the newer version.
@@ -190,7 +190,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
         
         // If it is not a preview version, return as-is.
         if (dashes is 0)
-            return new PreviewVersion(simple_version, 0, _ => null);
+            return new PreviewVersion(simple_version, null, _ => null);
         
         if (split_version[0].Count(c => c is '.') is not 1)
             throw new FormatException($"{nameof(input)} was not in a valid format.");
