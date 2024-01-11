@@ -135,7 +135,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// </returns>
     public static ImmutableArray<VersionBranch> GetBranches()
     {
-        return new PreviewVersion(new SimpleVersion([0]), 0, _ => null).Branches;
+        return new PreviewVersion(new SimpleVersion([0]), null, _ => null).Branches;
     }
     
     public override (bool NewerThan, bool EqualTo) Compare(PreviewVersion other)
@@ -192,7 +192,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
         if (dashes is 0)
             return new PreviewVersion(simple_version, null, _ => null);
         
-        if (split_version[0].Count(c => c is '.') is not 1)
+        if (split_version[1].Count(c => c is '.') is not 1)
             throw new FormatException($"{nameof(input)} was not in a valid format.");
         
         string[] end_split = split_version[1].Split('.');
