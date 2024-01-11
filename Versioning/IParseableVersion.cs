@@ -1,6 +1,6 @@
 namespace BenjcoreUtil.Versioning;
 
-public interface IParseableVersion<out TSelf> where TSelf : IParseableVersion<TSelf>
+public interface IParseableVersion<out TSelf> where TSelf : IParseableVersion<TSelf>, IVersion
 {
     /// <summary>
     /// Converts the string representation of a version to its object equivalent.
