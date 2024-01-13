@@ -42,7 +42,6 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// Thrown when <paramref name="branch_revision"/> is not null, but <paramref name="branch_selector"/> returns null,
     /// or vice versa. Also thrown when <paramref name="comparer"/> is not null, but is not of a supported type.
     /// </exception>
-    [ExcludeFromCodeCoverage]
     public PreviewVersion(SimpleVersion base_version, uint? branch_revision,
         Func<IEnumerable<VersionBranch>, VersionBranch?> branch_selector, IComparableVersion? comparer = null)
     {
