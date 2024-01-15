@@ -32,16 +32,26 @@ public sealed class PreviewVersionTests
     
     private static void AssertComparisons(PreviewVersion v1, IVersion v2, bool greater_than, bool equal_to)
     {
-        var result_newer_than = v1.IsNewerThan(v2);
-        var result_newer_than_or_equal_to = v1.IsNewerThanOrEqualTo(v2);
-        var result_older_than = v1.IsOlderThan(v2);
-        var result_older_than_or_equal_to = v1.IsOlderThanOrEqualTo(v2);
-        var result_equal_to = v1.IsEqualTo(v2);
+        bool result_newer_than = v1.IsNewerThan(v2);
+        bool result_newer_than_or_equal_to = v1.IsNewerThanOrEqualTo(v2);
+        bool result_older_than = v1.IsOlderThan(v2);
+        bool result_older_than_or_equal_to = v1.IsOlderThanOrEqualTo(v2);
+        bool result_equal_to = v1.IsEqualTo(v2);
         
         if (v2 is PreviewVersion p)
         {
             var result = v1.Compare(p);
             Assert.Equal((greater_than, equal_to), result);
+            
+            // The strings and hash codes will always be different if one has extra trailing zeros.
+            if (v1.SimpleVersion.Length == p.SimpleVersion.Length && !(v1.IsUsingComparer && p.IsUsingComparer))
+            {
+                bool result_equal_strings = v1.ToString() == p.ToString();
+                bool result_equal_hash_code = v1.GetHashCode() == p.GetHashCode();
+                
+                Assert.Equal(equal_to, result_equal_strings);
+                Assert.Equal(equal_to, result_equal_hash_code);
+            }
         }
         
         Assert.Equal(greater_than, result_newer_than);
@@ -59,6 +69,11 @@ public sealed class PreviewVersionTests
             Assert.Equal(equal_to, v1 == p2);
             Assert.Equal(!equal_to, v1 != p2);
         }
+        
+        if (v2 is PreviewVersion p3)
+            Assert.Equal(equal_to, v1.Equals(p3));
+        else
+            Assert.False(v1.Equals(v2));
     }
     
     [Theory]

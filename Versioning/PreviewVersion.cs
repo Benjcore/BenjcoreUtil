@@ -128,6 +128,11 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     public BuildNumberComparer? BuildNumber { get; private set; } = null;
     
     /// <summary>
+    /// Whether or not this version is using a comparer.
+    /// </summary>
+    public bool IsUsingComparer => BuildNumber is not null || BuildDate is not null;
+    
+    /// <summary>
     /// Gets the branches that are available for this version.
     /// </summary>
     /// <returns>
@@ -230,6 +235,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// <remarks>
     /// <b>NOTE: This method does NOT compare references like object.Equals().</b>
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     public override bool Equals(object? obj)
     {
         if (obj is IVersion version)
@@ -250,8 +256,10 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     }
     
 #region Operators
+    [ExcludeFromCodeCoverage]
     public static explicit operator string(PreviewVersion input) => input.ToString();
     
+    [ExcludeFromCodeCoverage]
     public static bool operator ==(PreviewVersion? x, PreviewVersion? y)
     {
         if ((object?) y is null)
@@ -263,10 +271,10 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
         return x.IsEqualTo(y);
     }
     
-    public static bool operator !=(PreviewVersion? x, PreviewVersion? y) => !(x == y);
-    public static bool operator >(PreviewVersion x, PreviewVersion y) => x.IsNewerThan(y);
-    public static bool operator <(PreviewVersion x, PreviewVersion y) => x.IsOlderThan(y);
-    public static bool operator >=(PreviewVersion x, PreviewVersion y) => x.IsNewerThanOrEqualTo(y);
-    public static bool operator <=(PreviewVersion x, PreviewVersion y) => x.IsOlderThanOrEqualTo(y);
+    [ExcludeFromCodeCoverage] public static bool operator !=(PreviewVersion? x, PreviewVersion? y) => !(x == y);
+    [ExcludeFromCodeCoverage] public static bool operator >(PreviewVersion x, PreviewVersion y) => x.IsNewerThan(y);
+    [ExcludeFromCodeCoverage] public static bool operator <(PreviewVersion x, PreviewVersion y) => x.IsOlderThan(y);
+    [ExcludeFromCodeCoverage] public static bool operator >=(PreviewVersion x, PreviewVersion y) => x.IsNewerThanOrEqualTo(y);
+    [ExcludeFromCodeCoverage] public static bool operator <=(PreviewVersion x, PreviewVersion y) => x.IsOlderThanOrEqualTo(y);
 #endregion
 }
