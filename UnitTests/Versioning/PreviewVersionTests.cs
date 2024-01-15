@@ -30,16 +30,20 @@ public sealed class PreviewVersionTests
         AssertComparisons(v1, v2, greater_than, equal_to);
     }
     
-    private static void AssertComparisons(PreviewVersion v1, PreviewVersion v2, bool greater_than, bool equal_to)
+    private static void AssertComparisons(PreviewVersion v1, IVersion v2, bool greater_than, bool equal_to)
     {
-        var result = v1.Compare(v2);
         var result_newer_than = v1.IsNewerThan(v2);
         var result_newer_than_or_equal_to = v1.IsNewerThanOrEqualTo(v2);
         var result_older_than = v1.IsOlderThan(v2);
         var result_older_than_or_equal_to = v1.IsOlderThanOrEqualTo(v2);
         var result_equal_to = v1.IsEqualTo(v2);
         
-        Assert.Equal((greater_than, equal_to), result);
+        if (v2 is PreviewVersion p)
+        {
+            var result = v1.Compare(p);
+            Assert.Equal((greater_than, equal_to), result);
+        }
+        
         Assert.Equal(greater_than, result_newer_than);
         Assert.Equal(greater_than || equal_to, result_newer_than_or_equal_to);
         Assert.Equal(!greater_than && !equal_to, result_older_than);
@@ -49,8 +53,12 @@ public sealed class PreviewVersionTests
         Assert.Equal(!greater_than && !equal_to, v1 < v2);
         Assert.Equal(greater_than || equal_to, v1 >= v2);
         Assert.Equal(!greater_than || equal_to, v1 <= v2);
-        Assert.Equal(equal_to, v1 == v2);
-        Assert.Equal(!equal_to, v1 != v2);
+        
+        if (v2 is PreviewVersion p2)
+        {
+            Assert.Equal(equal_to, v1 == p2);
+            Assert.Equal(!equal_to, v1 != p2);
+        }
     }
     
     [Theory]
@@ -102,6 +110,19 @@ public sealed class PreviewVersionTests
         
         // Act
         var result = () => version.SetComparer(new InvalidComparer());
+        
+        // Assert
+        Assert.Throws<ArgumentException>(result);
+    }
+    
+    [Fact]
+    public void PreviewVersion_Comparison_ThrowsArgumentExceptionOnInvalidType()
+    {
+        // Arrange
+        PreviewVersion version = new(new SimpleVersion([1, 0, 0]), null, _ => null);
+        
+        // Act
+        var result = () => AssertComparisons(version, version.SimpleVersion, false, true);
         
         // Assert
         Assert.Throws<ArgumentException>(result);
