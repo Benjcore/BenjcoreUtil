@@ -142,6 +142,27 @@ public sealed class PreviewVersionTests
         // Assert
         Assert.Throws<ArgumentException>(result);
     }
+    
+    [Fact]
+    public void PreviewVersion_Constructor_ThrowsArgumentExceptionWhenBranchIsNullButRevisionIsNot()
+    {
+        // Act
+        Func<PreviewVersion> result = () => new PreviewVersion(new SimpleVersion([1, 0, 0]), 2, _ => null);
+        
+        // Assert
+        Assert.Throws<ArgumentException>(result);
+    }
+    
+    [Fact]
+    public void PreviewVersion_Constructor_ThrowsArgumentExceptionWhenBranchIsNotNullButRevisionIs()
+    {
+        // Act
+        Func<PreviewVersion> result = () => new PreviewVersion
+            (new SimpleVersion([1, 0, 0]), null, x => x.SingleOrDefault(b => b.Suffix == "alpha"));
+        
+        // Assert
+        Assert.Throws<ArgumentException>(result);
+    }
 }
 
 internal sealed class InvalidComparer : ComparableVersionBase<InvalidComparer>
