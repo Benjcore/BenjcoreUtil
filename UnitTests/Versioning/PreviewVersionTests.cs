@@ -163,6 +163,42 @@ public sealed class PreviewVersionTests
         // Assert
         Assert.Throws<ArgumentException>(result);
     }
+    
+    [Fact]
+    public void PreviewVersion_Parse_ThrowsArgumentNullExceptionWhenInputIsNullOrEmpty()
+    {
+        // Act
+        var result1 = () => PreviewVersion.Parse(null);
+        var result2 = () => PreviewVersion.Parse(String.Empty);
+        
+        // Assert
+        Assert.Throws<ArgumentNullException>(result1);
+        Assert.Throws<ArgumentNullException>(result2);
+        Assert.False(PreviewVersion.TryParse(null, out _));
+        Assert.False(PreviewVersion.TryParse(String.Empty, out _));
+    }
+    
+    [Theory]
+    [InlineData("1.1.")]
+    [InlineData(".1.1")]
+    [InlineData(".")]
+    [InlineData("1.0.0test")]
+    [InlineData("1.0.0-alpha")]
+    [InlineData("1.0.0-alpha1")]
+    [InlineData("1.0.0-alpha-1")]
+    [InlineData("1.0.0--alpha.1")]
+    [InlineData("1.0.0-invalid.4")]
+    public void PreviewVersion_Parse_ThrowsFormatExceptionOnInvalidInput(string input)
+    {
+        // Act
+        var result = () => PreviewVersion.Parse(input);
+        bool result_try = PreviewVersion.TryParse(input, out var always_null);
+        
+        // Assert
+        Assert.Throws<FormatException>(result);
+        Assert.False(result_try);
+        Assert.Null(always_null);
+    }
 }
 
 internal sealed class InvalidComparer : ComparableVersionBase<InvalidComparer>
