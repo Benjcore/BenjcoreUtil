@@ -144,6 +144,19 @@ public sealed class PreviewVersionTests
     }
     
     [Fact]
+    public void PreviewVersion_Comparison_DoesNotUseComparerWhenSimpleVersionsAreDifferent()
+    {
+        // Arrange
+        var comparer_older = new BuildNumberComparer(1000);
+        var comparer_newer = new BuildNumberComparer(1001);
+        var version_newer = new PreviewVersion(new SimpleVersion([2, 0, 5]), null, _ => null, comparer_older);
+        var version_older = new PreviewVersion(new SimpleVersion([1, 5, 9]), null, _ => null, comparer_newer);
+        
+        // Act & Assert
+        AssertComparisons(version_newer, version_older, true, false);
+    }
+    
+    [Fact]
     public void PreviewVersion_Constructor_ThrowsArgumentExceptionWhenBranchIsNullButRevisionIsNot()
     {
         // Act

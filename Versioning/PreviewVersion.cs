@@ -37,6 +37,8 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// <param name="comparer">
     /// An optional <see cref="IComparableVersion"/> to use for comparison.
     /// <see cref="DateTimeComparer"/> and <see cref="BuildNumberComparer"/> are supported.
+    /// The comparer will not be used in comparison if the other version does not have the
+    /// same comparer set, or their <see cref="SimpleVersion"/>s are not equal.
     /// </param>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="branch_revision"/> is not null, but <paramref name="branch_selector"/> returns null,
@@ -145,14 +147,6 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     
     public override (bool NewerThan, bool EqualTo) Compare(PreviewVersion other)
     {
-        // If both versions have build numbers, compare them and return the result.
-        if (BuildNumber is not null && other.BuildNumber is not null)
-            return BuildNumber.Compare(other.BuildNumber);
-        
-        // If both versions have build dates, compare them and return the result.
-        if (BuildDate is not null && other.BuildDate is not null)
-            return BuildDate.Compare(other.BuildDate);
-        
         // If both versions are full releases, then we just compare them as SimpleVersions.
         if (Branch is null && other.Branch is null)
             return (SimpleVersion.IsNewerThan(other.SimpleVersion), SimpleVersion.IsEqualTo(other.SimpleVersion));
@@ -160,6 +154,14 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
         // If the underlying SimpleVersions are different, we just need to check which one is newer.
         if (!SimpleVersion.IsEqualTo(other.SimpleVersion))
             return (SimpleVersion.IsNewerThan(other.SimpleVersion), false);
+        
+        // If both versions have build numbers, compare them and return the result.
+        if (BuildNumber is not null && other.BuildNumber is not null)
+            return BuildNumber.Compare(other.BuildNumber);
+        
+        // If both versions have build dates, compare them and return the result.
+        if (BuildDate is not null && other.BuildDate is not null)
+            return BuildDate.Compare(other.BuildDate);
         
         // If the underlying SimpleVersions are the same, but the branches are different,
         // then the version who's branch level is lower, is the newer version.
