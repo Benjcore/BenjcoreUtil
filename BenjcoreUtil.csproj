@@ -9,6 +9,7 @@
         <Nullable>enable</Nullable>
         <Authors>Benj_2005</Authors>
         <Company>Benjcore</Company>
+        <!-- When bumping version numbers, don't forget to update GetUtilVersion.cs. -->
         <Version>2.1.1</Version>
         <AssemblyVersion>2.1.1</AssemblyVersion>
         <FileVersion>2.1.1.0</FileVersion>
@@ -22,13 +23,18 @@
         <RepositoryUrl>https://github.com/Benjcore/BenjcoreUtil</RepositoryUrl>
         <NoWarn>CS1591, NU5100</NoWarn>
         <PackageTags>utilities logger logging versioning hashing</PackageTags>
-        <PackageReleaseNotes>Remove Unused Dependency</PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageReleaseNotes>See https://github.com/Benjcore/BenjcoreUtil/releases</PackageReleaseNotes>
     </PropertyGroup>
     
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
             <_Parameter1>UnitTests</_Parameter1>
         </AssemblyAttribute>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="/"/>
     </ItemGroup>
     
     <ItemGroup>
