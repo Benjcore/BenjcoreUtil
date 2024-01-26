@@ -17,12 +17,12 @@ public class RSAKeys
     /// Use OAEP if true, else use PKCS#1.5.
     /// </summary>
     protected const bool OAEP = true;
-
+    
     /// <summary>
     /// The RSA default key size.
     /// </summary>
     private const RSAKeyLengths DefaultKeySize = RSAKeyLengths.RSA2048;
-
+    
     /// <summary>
     /// Returns an integer representation of <see cref="UseKeySize"/>.
     /// </summary>
@@ -39,33 +39,33 @@ public class RSAKeys
             };
         }
     }
-
+    
     /// <summary>
     /// A <see cref="RSAKeyLengths"/> field which dictates the RSA key length used by the <see cref="RSAKeys"/> object.
     /// </summary>
     /// <remarks>This field is readonly.</remarks>
     public readonly RSAKeyLengths UseKeySize;
-
+    
     /// <summary>
     /// A <see cref="RSAParameters"/> object representing the RSA private key of the <see cref="RSAKeys"/> object.
     /// </summary>
     public RSAParameters PrivateKey { get; private set; }
-
+    
     /// <summary>
     /// Returns a string representation of <see cref="PrivateKey"/>.
     /// </summary>
     public string PrivateKeyString => KeyToString(PrivateKey);
-
+    
     /// <summary>
     /// A <see cref="RSAParameters"/> object representing the RSA public key of the <see cref="RSAKeys"/> object.
     /// </summary>
     public RSAParameters PublicKey { get; private set; }
-
+    
     /// <summary>
     /// Returns a string representation of <see cref="PublicKey"/>.
     /// </summary>
     public string PublicKeyString => KeyToString(PublicKey);
-
+    
     /// <summary>
     /// Creates a new instance of the <see cref="RSAKeys"/> class.
     /// </summary>
@@ -79,7 +79,7 @@ public class RSAKeys
     public RSAKeys(RSAKeyLengths keyLengths = DefaultKeySize)
     {
         UseKeySize = keyLengths;
-
+        
         try
         {
             UpdateKeys();
@@ -89,7 +89,7 @@ public class RSAKeys
             throw new InvalidEnumArgumentException($"Invalid argument value of {nameof(keyLengths)}.", e);
         }
     }
-
+    
     /// <summary>
     /// Asynchronously creates a new instance of the <see cref="RSAKeys"/> class.
     /// </summary>
@@ -102,7 +102,7 @@ public class RSAKeys
         var task = Task.Run(() => new RSAKeys(keyLengths));
         return await task;
     }
-
+    
     /// <summary>
     /// Creates a new instance of the <see cref="RSAKeys"/> class
     /// by cloning an existing <see cref="RSAKeys"/> object.
@@ -124,7 +124,7 @@ public class RSAKeys
         PublicKey = objectToClone.PublicKey;
         PrivateKey = objectToClone.PrivateKey;
     }
-
+    
     /// <summary>
     /// Generate a new RSA keypair which will override <see cref="PublicKey"/> and <see cref="PrivateKey"/>.
     /// </summary>
@@ -136,16 +136,16 @@ public class RSAKeys
     {
         // Create a RSA-CSP
         var csp = new RSACryptoServiceProvider(KeySize);
-
+        
         // Get Keys
         var privateKey = csp.ExportParameters(true); // Private
         var publicKey = csp.ExportParameters(false); // Public
-
+        
         // Update Keys
         PrivateKey = privateKey;
         PublicKey = publicKey;
     }
-
+    
     /// <summary>
     /// Asynchronously calls <see cref="UpdateKeys"/>.
     /// </summary>
@@ -154,7 +154,7 @@ public class RSAKeys
         var task = Task.Run(UpdateKeys);
         await task;
     }
-
+    
     /// <summary>
     /// Coverts a <see cref="RSAParameters"/> key to a byte array.
     /// </summary>
@@ -169,7 +169,7 @@ public class RSAKeys
         xs.Serialize(wrt, key);
         return Encoding.UTF8.GetBytes(sw.ToString());
     }
-
+    
     /// <summary>
     /// Coverts a <see cref="RSAParameters"/> key to a string.
     /// </summary>
@@ -180,7 +180,7 @@ public class RSAKeys
     {
         return Encoding.UTF8.GetString(DecodeKey(key));
     }
-
+    
     /// <summary>
     /// Parses a <see cref="RSAParameters"/> object from a string parameter.
     /// </summary>
@@ -195,11 +195,11 @@ public class RSAKeys
         var xs = new XmlSerializer(typeof(RSAParameters));
         return (RSAParameters) (xs.Deserialize(xmlReader) ?? throw new NullReferenceException());
     }
-
+    
     //
     // Encrypt
     //
-
+    
     /// <summary>
     /// Encrypts data using a RSA public key.
     /// </summary>
@@ -215,7 +215,7 @@ public class RSAKeys
         var inputBin = Encoding.UTF8.GetBytes(input);
         return csp.Encrypt(inputBin, OAEP);
     }
-
+    
     /// <summary>
     /// Encrypts data using a RSA public key.
     /// </summary>
@@ -230,7 +230,7 @@ public class RSAKeys
         csp.ImportParameters(publicKey);
         return csp.Encrypt(input, OAEP);
     }
-
+    
     /// <summary>
     /// Encrypts data using a RSA public key and encodes it using base64.
     /// </summary>
@@ -244,7 +244,7 @@ public class RSAKeys
         var output = Encrypt(input, publicKey);
         return Convert.ToBase64String(output);
     }
-
+    
     /// <summary>
     /// Encrypts data using a RSA public key and encodes it using base64.
     /// </summary>
@@ -258,11 +258,11 @@ public class RSAKeys
         var output = Encrypt(input, publicKey);
         return Convert.ToBase64String(output);
     }
-
+    
     //
     // Decrypt
     //
-
+    
     /// <summary>
     /// Decrypts data using a RSA private key.
     /// </summary>
@@ -280,7 +280,7 @@ public class RSAKeys
         var outputBin = csp.Decrypt(inputBin, OAEP);
         return Encoding.UTF8.GetString(outputBin);
     }
-
+    
     /// <summary>
     /// Decrypts data using a RSA private key.
     /// </summary>
@@ -296,7 +296,7 @@ public class RSAKeys
         var outputBin = csp.Decrypt(inputBytes, OAEP);
         return Encoding.UTF8.GetString(outputBin);
     }
-
+    
     /// <summary>
     /// Decrypts data using a RSA private key.
     /// </summary>
@@ -313,7 +313,7 @@ public class RSAKeys
         var inputBin = Convert.FromBase64String(base64Input);
         return csp.Decrypt(inputBin, OAEP);
     }
-
+    
     /// <summary>
     /// Decrypts data using a RSA private key.
     /// </summary>
@@ -328,7 +328,7 @@ public class RSAKeys
         csp.ImportParameters(privateKey);
         return csp.Decrypt(inputBytes, OAEP);
     }
-
+    
     /// <summary>
     /// Determines whether this instance and another specified RSAKeys object have the same value.
     /// </summary>
@@ -347,7 +347,7 @@ public class RSAKeys
         {
             return true;
         }
-
+        
         return false;
     }
 }

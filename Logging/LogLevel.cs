@@ -12,7 +12,7 @@ public struct LogLevel
     /// The name of the <see cref="LogLevel"/> to be displayed.
     /// </summary>
     public string Name { get; }
-
+    
     /// <summary>
     /// An integer representation of the <see cref="LogLevel"/>'s severity with the lowest
     /// being most severe and the highest being the least severe.
@@ -23,18 +23,18 @@ public struct LogLevel
     /// a more-severe one. (Especially if the most-severe level already means fatal.)
     /// </remarks>
     public int Severity { get; }
-
+    
     /// <summary>
     /// A boolean representing whether or not an event of this level should be printed to console (stdout).
     /// </summary>
     public bool Print { get; set; }
-
+    
     /// <summary>
     /// A boolean representing whether or not an event of this level should be
     /// written to the <see cref="Logger"/>'s <see cref="Logger.LogFile"/>.
     /// </summary>
     public bool Log { get; set; }
-
+    
     /// <summary>
     /// Represents a <see cref="Action"/> that is executed whenever a <see cref="Logger"/> logs
     /// an event of the current <see cref="LogLevel"/>. The <see cref="Action"/> must take a
@@ -46,14 +46,14 @@ public struct LogLevel
     /// like a dialog box or Debug.Log() in unity.
     /// </remarks>
     public Action<string>? Function { get; } = null;
-
+    
     /// <summary>
     /// If true, the <see cref="Logger"/> will use the raw event message as the <see cref="Function"/>
     /// parameter. If false, the <see cref="Logger"/> will use the event message formatted by
     /// <see cref="Logger.Style">Logger.Style</see>.
     /// </summary>
     public bool RawStringFunctionInvoke { get; } = false;
-
+    
     /// <summary>
     /// Reads a <see cref="LogSettings"/> enum and creates a <see cref="Tuple{T1, T2}">Tuple&#60;bool, bool&#62;</see>
     /// representation of it.
@@ -70,11 +70,11 @@ public struct LogLevel
             LogSettings.JustLog => Tuple.Create<bool, bool>(true, false),
             LogSettings.JustPrint => Tuple.Create<bool, bool>(false, true),
             LogSettings.Nothing => Tuple.Create<bool, bool>(false, false),
-
+            
             _ => throw new InvalidEnumArgumentException("Input is invalid."),
         };
     }
-
+    
     /// <summary>
     /// Creates new a new instance of the <see cref="LogLevel"/> class.
     /// </summary>
@@ -87,13 +87,13 @@ public struct LogLevel
     {
         Name = name;
         Severity = severity;
-
+        
         // Set Log & Print
         var settings = ReadLogSettings(logSettings);
         Log = settings.Item1;
         Print = settings.Item2;
     }
-
+    
     /// <summary>
     /// Creates new a new instance of the <see cref="LogLevel"/> class.
     /// </summary>
@@ -110,13 +110,13 @@ public struct LogLevel
         Severity = severity;
         Function = function;
         RawStringFunctionInvoke = funcRawMsg;
-
+        
         // Set Log & Print
         var settings = ReadLogSettings(logSettings);
         Log = settings.Item1;
         Print = settings.Item2;
     }
-
+    
     /// <summary>
     /// Returns a string that represents the current object.
     /// </summary>
@@ -125,25 +125,25 @@ public struct LogLevel
     {
         return Name;
     }
-
+    
     public override int GetHashCode()
     {
         return Name.GetHashCode() / 2 + Severity;
     }
-
+    
     public override bool Equals(object? obj)
     {
         if (obj is LogLevel level)
         {
             return Severity == level.Severity;
         }
-
+        
         return RuntimeHelpers.Equals(this, obj);
     }
-
+    
     public static implicit operator LogLevel(Tuple<string, int, LogSettings> input) =>
         new(input.Item1, input.Item2, input.Item3);
-
+    
     public static bool operator <(LogLevel a, LogLevel b) => a.Severity < b.Severity;
     public static bool operator >(LogLevel a, LogLevel b) => a.Severity > b.Severity;
     public static bool operator <=(LogLevel a, LogLevel b) => a.Severity <= b.Severity;

@@ -12,7 +12,7 @@ public static class MD5
     /// Default text encoding to use if none is specified.
     /// </summary>
     public static Encoding DefaultEncoding = Encoding.UTF8;
-
+    
     /// <summary>
     /// Gets the MD5 Hash of the given input.
     /// </summary>
@@ -24,11 +24,11 @@ public static class MD5
     {
         // Sets encoding to the value of DefaultEncoding if the encoding isn't specified.
         encoding ??= DefaultEncoding;
-
+        
         byte[] inputBin = encoding.GetBytes(input);
         return GetMD5(inputBin);
     }
-
+    
     /// <summary>
     /// Gets the MD5 Hash of the given input.
     /// </summary>
@@ -36,17 +36,14 @@ public static class MD5
     /// <returns>The MD5 hash of the input.</returns>
     public static string GetMD5(byte[] input)
     {
-        using (Crypt.MD5 md5 = Crypt.MD5.Create())
+        byte[] binResult = Crypt.MD5.HashData(input);
+        StringBuilder sb = new StringBuilder();
+        
+        foreach (byte item in binResult)
         {
-            byte[] binResult = md5.ComputeHash(input);
-            StringBuilder sb = new StringBuilder();
-
-            foreach (byte item in binResult)
-            {
-                sb.Append(item.ToString("X2"));
-            }
-
-            return sb.ToString();
+            sb.Append(item.ToString("X2"));
         }
+        
+        return sb.ToString();
     }
 }
