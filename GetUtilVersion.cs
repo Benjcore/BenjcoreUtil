@@ -13,7 +13,7 @@ public static class GetUtilVersion
     // Internal version identifiers
     // When bumping the version, don't forget to update BenjcoreUtil.csproj.
     private static uint[] _base_version => [2, 2, 0];
-    private static readonly uint? _preview_revision = 2;
+    private static readonly uint? _preview_revision = 3;
     private static readonly string? _preview_branch = "rc"; // Should be the branch's suffix.
     
     /// <summary>
@@ -45,7 +45,5 @@ public static class GetUtilVersion
     /// BenjcoreUtil Version as a BenjcoreUtil <see cref="Version"/> object.
     /// </summary>
     [Obsolete("GetUtilVersion.VersionAsVersion is deprecated, use GetUtilVersion.VersionAsSimpleVersion instead.")]
-#pragma warning disable CS0618
     public static readonly Version VersionAsVersion = new(new Simple(VersionAsUIntArray));
-#pragma warning restore CS0618
 }
