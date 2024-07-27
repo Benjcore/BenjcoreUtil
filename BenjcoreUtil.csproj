@@ -20,7 +20,11 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeDebugSymbolsProjectOutputGroup>true</IncludeDebugSymbolsProjectOutputGroup>
         <IncludeSourceFilesProjectOutputGroup>true</IncludeSourceFilesProjectOutputGroup>
+        <IncludeDocumentationProjectOutputGroup>true</IncludeDocumentationProjectOutputGroup>
         <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <DocumentationFile>bin\Release\net8.0\BenjcoreUtil.xml</DocumentationFile>
         <RepositoryUrl>https://github.com/Benjcore/BenjcoreUtil</RepositoryUrl>
         <NoWarn>CS1591, NU5100</NoWarn>
         <PackageTags>utilities logger logging versioning hashing</PackageTags>
