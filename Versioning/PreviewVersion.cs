@@ -32,7 +32,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// </param>
     /// <param name="branch_selector">
     /// A function that selects the branch for the new preview version,
-    /// or returns null if it is not a preview version.
+    /// or either returns null or is null if it is not a preview version.
     /// </param>
     /// <param name="comparer">
     /// An optional <see cref="IComparableVersion"/> to use for comparison.
@@ -44,15 +44,15 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// Thrown when <paramref name="branch_revision"/> is not null, but <paramref name="branch_selector"/> returns null,
     /// or vice versa. Also thrown when <paramref name="comparer"/> is not null, but is not of a supported type.
     /// </exception>
-    public PreviewVersion(SimpleVersion base_version, uint? branch_revision,
-        Func<IEnumerable<VersionBranch>, VersionBranch?> branch_selector, IComparableVersion? comparer = null)
+    public PreviewVersion(SimpleVersion base_version, uint? branch_revision = null,
+        Func<IEnumerable<VersionBranch>, VersionBranch?>? branch_selector = null, IComparableVersion? comparer = null)
     {
         if (comparer is not null)
             SetComparer(comparer); // Will throw an exception if the comparer is not supported.
         
         SimpleVersion = base_version;
         SimpleVersion.AllowDifferentLengthComparisons = true;
-        Branch = branch_selector.Invoke(Branches);
+        Branch = branch_selector?.Invoke(Branches);
         
         // If the branch is null, we need to ensure that the branch revision is also null.
         if (Branch is null && branch_revision is not null)
