@@ -310,7 +310,7 @@ public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
     }
     
     /// <inheritdoc cref="IParseableVersion{TSelf}.Parse"/>
-    /// <remarks><paramref name="input"/> may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+    /// <remarks><paramref name="input"/> may begin with a 'v' (case-insensitive) for styling. The 'v' will be ignored.</remarks>
     public static SimpleVersion Parse([NotNull] string? input)
     {
         if (input is null || input.Length < 1)
@@ -333,7 +333,7 @@ public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
     }
     
     /// <inheritdoc cref="IParseableVersion{TSelf}.TryParse"/>
-    /// <remarks><paramref name="input"/> may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+    /// <remarks><paramref name="input"/> may begin with a 'v' (case-insensitive) for styling. The 'v' will be ignored.</remarks>
     public static bool TryParse([NotNullWhen(true)] string? input, out SimpleVersion? result)
     {
         // Call this default implementation, which will call SimpleVersion.Parse().

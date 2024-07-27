@@ -164,7 +164,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
             return BuildDate.Compare(other.BuildDate);
         
         // If the underlying SimpleVersions are the same, but the branches are different,
-        // then the version who's branch level is lower, is the newer version.
+        // then the version whose branch level is lower, is the newer version.
         // Note: If the branch is null, then it's a full release, aka level 0.
         if ((Branch?.Level ?? 0) != (other.Branch?.Level ?? 0))
             return ((Branch?.Level ?? 0) < (other.Branch?.Level ?? 0), false);
@@ -179,7 +179,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     }
     
     /// <inheritdoc cref="IParseableVersion{TSelf}.Parse"/>
-    /// <remarks><paramref name="input"/> may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+    /// <remarks><paramref name="input"/> may begin with a 'v' (case-insensitive) for styling. The 'v' will be ignored.</remarks>
     public static PreviewVersion Parse([NotNull] string? input)
     {
         if (input is null || input.Length < 1)
@@ -216,7 +216,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     }
     
     /// <inheritdoc cref="IParseableVersion{TSelf}.TryParse"/>
-    /// <remarks><paramref name="input"/> may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+    /// <remarks><paramref name="input"/> may begin with a 'v' (case-insensitive) for styling. The 'v' will be ignored.</remarks>
     public static bool TryParse([NotNullWhen(true)] string? input, out PreviewVersion? result)
     {
         // Call this default implementation, which will call SimpleVersion.Parse().

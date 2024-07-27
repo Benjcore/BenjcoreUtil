@@ -297,7 +297,7 @@ public class Simple : IVersionType<object> {
   /// <exception cref="FormatException">input is not in the correct format.</exception>
   /// <exception cref="OverflowException">A number in input is not within
   /// the 32-Bit signed integer limits.</exception>
-  /// <remarks>input may begin with a 'v' (case insensitive) for styling.
+  /// <remarks>input may begin with a 'v' (case-insensitive) for styling.
   /// The 'v' will be ignored.</remarks>
   public static Simple Parse([NotNull] string? input) {
 
@@ -321,7 +321,7 @@ public class Simple : IVersionType<object> {
   /// <param name="result">When this method returns, contains the simple version object equivalent of
   /// the string input, if the conversion succeeded, or null if the conversion failed.</param>
   /// <returns>true if input was converted successfully; otherwise, false.</returns>
-  /// <remarks>input may begin with a 'v' (case insensitive) for styling. The 'v' will be ignored.</remarks>
+  /// <remarks>input may begin with a 'v' (case-insensitive) for styling. The 'v' will be ignored.</remarks>
   public static bool TryParse([NotNullWhen(true)] string? input, out Simple? result) {
 
     try {
@@ -429,7 +429,7 @@ public class Version : IVersionType<Version> {
   /// </summary>
   /// <param name="input">The object you wish to compare to the current object.</param>
   /// <returns>
-  /// True if the current object is is equal to <paramref name="input"/>, otherwise false.
+  /// True if the current object is equal to <paramref name="input"/>, otherwise false.
   /// </returns>
   /// <exception cref="VersioningException">Can be thrown by <see cref="InnerObject"/>.</exception>
   public bool IsEqualTo(Version input) {
