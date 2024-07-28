@@ -140,7 +140,7 @@ public sealed class PreviewVersionTests
         var result = () => AssertComparisons(version, version.SimpleVersion, false, true);
         
         // Assert
-        Assert.Throws<ArgumentException>(result);
+        Assert.Throws<InvalidOperationException>(result);
     }
     
     [Fact]

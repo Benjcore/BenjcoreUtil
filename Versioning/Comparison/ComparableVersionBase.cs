@@ -20,17 +20,17 @@ public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> w
             return Compare(comparer);
         }
         
-        throw new ArgumentException("Cannot compare to the given version type.", nameof(other));
+        throw new InvalidOperationException($"Cannot compare to version type: '{nameof(other)}'.");
     }
     
     /// <inheritdoc cref="IVersion.IsNewerThan"/>
-    /// <throws cref="ArgumentException">
+    /// <throws cref="InvalidOperationException">
     /// Thrown when <paramref name="input"/> is not of type the correct type.
     /// </throws>
     public bool IsNewerThan(IVersion input) => Compare(input).NewerThan;
     
     /// <inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/>
-    /// <throws cref="ArgumentException">
+    /// <throws cref="InvalidOperationException">
     /// Thrown when <paramref name="input"/> is not of type the correct type.
     /// </throws>
     public bool IsNewerThanOrEqualTo(IVersion input)
@@ -41,7 +41,7 @@ public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> w
     }
     
     /// <inheritdoc cref="IVersion.IsOlderThan"/>
-    /// <throws cref="ArgumentException">
+    /// <throws cref="InvalidOperationException">
     /// Thrown when <paramref name="input"/> is not of type the correct type.
     /// </throws>
     public bool IsOlderThan(IVersion input)
@@ -52,7 +52,7 @@ public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> w
     }
     
     /// <inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/>
-    /// <throws cref="ArgumentException">
+    /// <throws cref="InvalidOperationException">
     /// Thrown when <paramref name="input"/> is not of type the correct type.
     /// </throws>
     public bool IsOlderThanOrEqualTo(IVersion input)
@@ -63,7 +63,7 @@ public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> w
     }
     
     /// <inheritdoc cref="IVersion.IsEqualTo"/>
-    /// <throws cref="ArgumentException">
+    /// <throws cref="InvalidOperationException">
     /// Thrown when <paramref name="input"/> is not of type the correct type.
     /// </throws>
     public bool IsEqualTo(IVersion input) => Compare(input).EqualTo;
