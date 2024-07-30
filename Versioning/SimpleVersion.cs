@@ -1,13 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using BenjcoreUtil.Versioning.Comparison;
 
 namespace BenjcoreUtil.Versioning;
 
 /// <summary>
 /// A SimpleVersion X.Y.Z versioning system that can have as many sections as you like.
 /// </summary>
-public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
+public class SimpleVersion : ComparableVersionBase<SimpleVersion>, IParseableVersion<SimpleVersion>
 {
     /// <summary>
     /// Dictates whether or not the current object can be compared with a <see cref="SimpleVersion"/> of a different length.
@@ -17,7 +18,7 @@ public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
     /// <summary>
     /// An unsigned integer array containing the version number assigned from the constructor.
     /// </summary>
-    public uint[] Data { get; private init; }
+    public uint[] Data { get; }
     
     /// <summary>
     /// A property representing the length of <see cref="Data"/>.
@@ -63,7 +64,7 @@ public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
     /// Thrown when <paramref name="input"/> and the current object are different lengths while
     /// <see cref="AllowDifferentLengthComparisons"/> is false.
     /// </exception>
-    internal (bool NewerThan, bool EqualTo) Calculate(SimpleVersion input)
+    public override (bool NewerThan, bool EqualTo) Compare(SimpleVersion input)
     {
         SimpleVersion current = new(Data);
         
@@ -127,106 +128,6 @@ public class SimpleVersion : IParseableVersion<SimpleVersion>, IVersion
         }
         
         return (greaterThan, equalTo);
-    }
-    
-    /// <summary>
-    /// <inheritdoc cref="IVersion.IsNewerThan"/>
-    /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.IsNewerThan"/></param>
-    /// <returns><inheritdoc cref="IVersion.IsNewerThan"/></returns>
-    /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
-    /// <exception cref="InvalidOperationException">
-    /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
-    /// </exception>
-    public bool IsNewerThan(IVersion input)
-    {
-        if (input is not SimpleVersion version)
-        {
-            throw new InvalidOperationException("SimpleVersion.isNewerThan can only be used with SimpleVersion objects.");
-        }
-        
-        var result = Calculate(version);
-        return result.NewerThan;
-    }
-    
-    /// <summary>
-    /// <inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/>
-    /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/></param>
-    /// <returns><inheritdoc cref="IVersion.IsNewerThanOrEqualTo"/></returns>
-    /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
-    /// <exception cref="InvalidOperationException">
-    /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
-    /// </exception>
-    public bool IsNewerThanOrEqualTo(IVersion input)
-    {
-        if (input is not SimpleVersion version)
-        {
-            throw new InvalidOperationException("SimpleVersion.isNewerThanOrEqualTo can only be used with SimpleVersion objects.");
-        }
-        
-        var result = Calculate(version);
-        return result.NewerThan || result.EqualTo;
-    }
-    
-    /// <summary>
-    /// <inheritdoc cref="IVersion.IsOlderThan"/>
-    /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.IsOlderThan"/></param>
-    /// <returns><inheritdoc cref="IVersion.IsOlderThan"/></returns>
-    /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
-    /// <exception cref="InvalidOperationException">
-    /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
-    /// </exception>
-    public bool IsOlderThan(IVersion input)
-    {
-        if (input is not SimpleVersion version)
-        {
-            throw new InvalidOperationException("SimpleVersion.isOlderThan can only be used with SimpleVersion objects.");
-        }
-        
-        var result = Calculate(version);
-        return result is { NewerThan: false, EqualTo: false };
-    }
-    
-    /// <summary>
-    /// <inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/>
-    /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/></param>
-    /// <returns><inheritdoc cref="IVersion.IsOlderThanOrEqualTo"/></returns>
-    /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
-    /// <exception cref="InvalidOperationException">
-    /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
-    /// </exception>
-    public bool IsOlderThanOrEqualTo(IVersion input)
-    {
-        if (input is not SimpleVersion version)
-        {
-            throw new InvalidOperationException("SimpleVersion.isOlderThanOrEqualTo can only be used with SimpleVersion objects.");
-        }
-        
-        var result = Calculate(version);
-        return !result.NewerThan || result.EqualTo;
-    }
-    
-    /// <summary>
-    /// <inheritdoc cref="IVersion.IsEqualTo"/>
-    /// </summary>
-    /// <param name="input"><inheritdoc cref="IVersion.IsEqualTo"/></param>
-    /// <returns><inheritdoc cref="IVersion.IsEqualTo"/></returns>
-    /// <exception cref="VersioningException"><inheritdoc cref="Calculate"/></exception>
-    /// <exception cref="InvalidOperationException">
-    /// <paramref name="input"/> is not of type <see cref="SimpleVersion"/>.
-    /// </exception>
-    public bool IsEqualTo(IVersion input)
-    {
-        if (input is not SimpleVersion version)
-        {
-            throw new InvalidOperationException("SimpleVersion.IsEqualTo can only be used with SimpleVersion objects.");
-        }
-        
-        var result = Calculate(version);
-        return result.EqualTo;
     }
     
 #region Operators
