@@ -11,8 +11,18 @@ public interface IComparableVersion : IVersion;
 /// <typeparam name="TSelf">
 /// The type of the class that implements this interface.
 /// </typeparam>
-public interface IComparableVersion<in TSelf> : IComparableVersion where TSelf : IComparableVersion
+public interface IComparableVersion<in TSelf> : IComparableVersion, IComparable<TSelf> where TSelf : IComparableVersion
 {
+    int IComparable<TSelf>.CompareTo(TSelf? other)
+    {
+        if (other == null) return 1; // If other is not a valid object reference, this instance is greater.
+        
+        (bool NewerThan, bool EqualTo) results = Compare(other);
+        
+        if (results.EqualTo) return 0;
+        return results.NewerThan ? 1 : -1;
+    }
+    
     /// <summary>
     /// Compares the current <see cref="IComparableVersion{TSelf}"/> instance to another.
     /// </summary>

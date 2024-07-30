@@ -74,6 +74,23 @@ public sealed class PreviewVersionTests
             Assert.Equal(equal_to, v1.Equals(p3));
         else
             Assert.False(v1.Equals(v2));
+        
+        if (v2 is PreviewVersion other)
+        {
+#pragma warning disable CA1859 // You can't do that
+            IComparable<PreviewVersion> comparable = v1;
+#pragma warning restore CA1859
+            
+            if (equal_to)
+                Assert.Equal(0, comparable.CompareTo(other));
+            else if (greater_than)
+                Assert.True(comparable.CompareTo(other) > 0);
+            else
+                Assert.True(comparable.CompareTo(other) < 0);
+            
+            // If the other is null, then the instance should be greater.
+            Assert.True(comparable.CompareTo(null) > 0);
+        }
     }
     
     [Theory]
