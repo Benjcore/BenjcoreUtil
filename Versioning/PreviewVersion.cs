@@ -109,6 +109,14 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     public VersionBranch? Branch { get; }
     
     /// <summary>
+    /// Represents whether or not this version is a full release.
+    /// </summary>
+    /// <remarks>
+    /// This is equivalent to checking if <see cref="Branch"/> is null.
+    /// </remarks>
+    public bool IsRelease => Branch is null;
+    
+    /// <summary>
     /// The base <see cref="SimpleVersion"/> of the current preview version.
     /// </summary>
     public SimpleVersion SimpleVersion { get; }
@@ -148,7 +156,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     public override (bool NewerThan, bool EqualTo) Compare(PreviewVersion other)
     {
         // If both versions are full releases, then we just compare them as SimpleVersions.
-        if (Branch is null && other.Branch is null)
+        if (IsRelease && other.IsRelease)
             return (SimpleVersion.IsNewerThan(other.SimpleVersion), SimpleVersion.IsEqualTo(other.SimpleVersion));
         
         // If the underlying SimpleVersions are different, we just need to check which one is newer.
@@ -225,12 +233,12 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     
     public override string ToString()
     {
-        if (Branch is null)
+        if (IsRelease)
         {
             return SimpleVersion.ToString();
         }
         
-        return $"{SimpleVersion}-{Branch.Suffix}.{BranchRevision}";
+        return $"{SimpleVersion}-{Branch!.Suffix}.{BranchRevision}";
     }
     
     /// <inheritdoc cref="object.Equals(object?)"/>
