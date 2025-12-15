@@ -10,9 +10,9 @@
         <Authors>Benj_2005</Authors>
         <Company>Benjcore</Company>
         <!-- When bumping version numbers, don't forget to update GetUtilVersion.cs. -->
-        <Version>2.1.1</Version>
-        <AssemblyVersion>2.1.1</AssemblyVersion>
-        <FileVersion>2.1.1.0</FileVersion>
+        <Version>2.1.2</Version>
+        <AssemblyVersion>2.1.2</AssemblyVersion>
+        <FileVersion>2.1.2.0</FileVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2025</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
