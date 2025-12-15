@@ -7,7 +7,7 @@ public class LoggerTests
 {
     private const string FileDirectory = "FileSystemLogs";
     private const string ArchiveDirectory = "LogArchives";
-
+    
     static LoggerTests()
     {
         Cleanup();
@@ -71,7 +71,7 @@ public class LoggerTests
         stream.Dispose();
         
         // Act
-        using var logger = new Logger
+        var logger = new Logger
         (
             new LogLevel[] { new("Test", 0, LogSettings.Nothing) },
             LogStyle.SampleLogStyleYMD,
@@ -80,7 +80,7 @@ public class LoggerTests
         );
         logger.Log("Test", "Sample Text");
         logger.Dispose();
-
+        
         // Assert
         Assert.Empty(File.ReadAllBytes(fileName));
     }
@@ -115,7 +115,7 @@ public class LoggerTests
             const string name = "TestLogger";
             
             // Act - Create Logger
-            using var logger = new Logger
+            var logger = new Logger
             (
                 logLevels,
                 style,
@@ -123,7 +123,7 @@ public class LoggerTests
                 name: name,
                 singleStream: singleStream
             );
-
+            
             // Act - Log
             if (stringLogLevel)
             {
@@ -151,8 +151,8 @@ public class LoggerTests
                 .GetStringBuilder()
                 .ToString()
                 .ReplaceLineEndings()
-                .Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine)
             );
+            
             Assert.Equal($"[{name}] [Print] {year} : Sample Text Print", consoleReader.ReadLine());
             Assert.Equal($"[{name}] [PrintAndLog] {year} : Sample Text PrintAndLog", consoleReader.ReadLine());
             
@@ -203,7 +203,7 @@ public class LoggerTests
             const string name = "TestLogger";
             
             // Act - Create Logger
-            using var logger = new Logger
+            var logger = new Logger
             (
                 logLevels,
                 style,
@@ -211,7 +211,7 @@ public class LoggerTests
                 name: name,
                 singleStream: singleStream
             );
-
+            
             // Act - Log
             if (stringLogLevel)
             {
@@ -239,8 +239,8 @@ public class LoggerTests
                 .GetStringBuilder()
                 .ToString()
                 .ReplaceLineEndings()
-                .Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine)
             );
+            
             Assert.Equal($"[{name}] [Print] {year} : Sample Text Print", await consoleReader.ReadLineAsync());
             Assert.Equal($"[{name}] [PrintAndLog] {year} : Sample Text PrintAndLog", await consoleReader.ReadLineAsync());
             
