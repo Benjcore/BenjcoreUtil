@@ -13,8 +13,8 @@ public static class GetUtilVersion
     // Internal version identifiers
     // When bumping the version, don't forget to update BenjcoreUtil.csproj.
     private static uint[] _base_version => [2, 2, 0];
-    private static readonly uint? _preview_revision = 4;
-    private static readonly string? _preview_branch = "rc"; // Should be the branch's suffix.
+    private static readonly uint? _preview_revision = 5;
+    private const string? _preview_branch = "rc"; // Should be the branch's suffix.
     
     /// <summary>
     /// BenjcoreUtil Version as a BenjcoreUtil <see cref="PreviewVersion"/> object.
