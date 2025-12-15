@@ -2,9 +2,9 @@ name: .NET Build & Test Linux
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "production" ]
   push:
-    branches: [ "master" ]
+    branches: [ "master", "production" ]
 
 jobs:
   build:
