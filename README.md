@@ -66,4 +66,4 @@ Console.WriteLine(hash);
 ### License
 Version 2.1.0 and newer are licensed under the [MIT License](LICENSE)<br>
 Older versions are all rights reserved. (You wouldn't want to use them anyway)<br>
-Copyright © Benj_2005 / Benjcore 2024
+Copyright © Benj_2005 / Benjcore 2025
