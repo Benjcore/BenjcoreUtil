@@ -34,5 +34,5 @@ public interface IComparableVersion<in TSelf> : IComparableVersion, IComparable<
     /// <throws cref="ArgumentException">
     /// Thrown when <paramref name="other"/> is not of type the correct type.
     /// </throws>
-    protected (bool NewerThan, bool EqualTo) Compare(TSelf other);
+    public (bool NewerThan, bool EqualTo) Compare(TSelf other);
 }
