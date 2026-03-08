@@ -10,6 +10,16 @@ namespace BenjcoreUtil.Versioning.Comparison;
 /// </remarks>
 public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> where TSelf : ComparableVersionBase<TSelf>
 {
+    public int CompareTo(TSelf? other)
+    {
+        if (other == null) return 1; // If other is not a valid object reference, this instance is greater.
+        
+        (bool NewerThan, bool EqualTo) results = Compare(other);
+        
+        if (results.EqualTo) return 0;
+        return results.NewerThan ? 1 : -1;
+    }
+    
     public abstract (bool NewerThan, bool EqualTo) Compare(TSelf other);
     
     private (bool NewerThan, bool EqualTo) Compare(IVersion other)

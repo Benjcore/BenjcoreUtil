@@ -30,24 +30,33 @@ public sealed class PreviewVersionTests
         AssertComparisons(v1, v2, greater_than, equal_to);
     }
     
-    private static void AssertComparisons(PreviewVersion v1, IVersion v2, bool greater_than, bool equal_to)
+    private static void AssertComparisons<V1, V2>(V1 v1, V2 v2, bool greater_than, bool equal_to)
+        where V1 : IComparableVersion<V1> where V2 : IComparableVersion<V2>
     {
+        if (greater_than && equal_to)
+        {
+            throw new ArgumentException("Bad Unit Test: Cannot be both greater than and equal to!");
+        }
+        
         bool result_newer_than = v1.IsNewerThan(v2);
         bool result_newer_than_or_equal_to = v1.IsNewerThanOrEqualTo(v2);
         bool result_older_than = v1.IsOlderThan(v2);
         bool result_older_than_or_equal_to = v1.IsOlderThanOrEqualTo(v2);
         bool result_equal_to = v1.IsEqualTo(v2);
         
-        if (v2 is PreviewVersion p)
+        PreviewVersion? p1 = v1 as PreviewVersion;
+        PreviewVersion? p2 = v2 as PreviewVersion;
+        
+        if (p1 is not null && p2 is not null)
         {
-            var result = v1.Compare(p);
+            var result = p1.Compare(p2);
             Assert.Equal((greater_than, equal_to), result);
             
             // The strings and hash codes will always be different if one has extra trailing zeros.
-            if (v1.SimpleVersion.Length == p.SimpleVersion.Length && !(v1.IsUsingComparer && p.IsUsingComparer))
+            if (p1.SimpleVersion.Length == p2.SimpleVersion.Length && !(p1.IsUsingComparer && p2.IsUsingComparer))
             {
-                bool result_equal_strings = v1.ToString() == p.ToString();
-                bool result_equal_hash_code = v1.GetHashCode() == p.GetHashCode();
+                bool result_equal_strings = p1.ToString() == p2.ToString();
+                bool result_equal_hash_code = p1.GetHashCode() == p2.GetHashCode();
                 
                 Assert.Equal(equal_to, result_equal_strings);
                 Assert.Equal(equal_to, result_equal_hash_code);
@@ -64,32 +73,40 @@ public sealed class PreviewVersionTests
         Assert.Equal(greater_than || equal_to, v1 >= v2);
         Assert.Equal(!greater_than || equal_to, v1 <= v2);
         
-        if (v2 is PreviewVersion p2)
+        if (v2 is V1 operand)
         {
-            Assert.Equal(equal_to, v1 == p2);
-            Assert.Equal(!equal_to, v1 != p2);
+            if (p1 is null || !p1.IsUsingComparer)
+            {
+                if (p2 is null || !p2.IsUsingComparer)
+                {
+                    Assert.Equal(equal_to, v1.CompareTo(operand) == 0);
+                    Assert.Equal(greater_than, v1.CompareTo(operand) > 0);
+                }
+            }
         }
         
-        if (v2 is PreviewVersion p3)
-            Assert.Equal(equal_to, v1.Equals(p3));
-        else
-            Assert.False(v1.Equals(v2));
-        
-        if (v2 is PreviewVersion other)
+        if (p1 is not null && p2 is not null)
         {
-#pragma warning disable CA1859 // You can't do that
-            IComparable<PreviewVersion> comparable = v1;
-#pragma warning restore CA1859
-            
+            Assert.Equal(equal_to, p1 == p2);
+            Assert.Equal(!equal_to, p1 != p2);
+        }
+        
+        if (p1 is not null && p2 is not null)
+            Assert.Equal(equal_to, p1.Equals(p2));
+        else if (p1 is not null)
+            Assert.False(p1.Equals(v2));
+        
+        if (p1 is not null && p2 is not null)
+        {
             if (equal_to)
-                Assert.Equal(0, comparable.CompareTo(other));
+                Assert.Equal(0, p1.CompareTo(p2));
             else if (greater_than)
-                Assert.True(comparable.CompareTo(other) > 0);
+                Assert.True(p1.CompareTo(p2) > 0);
             else
-                Assert.True(comparable.CompareTo(other) < 0);
+                Assert.True(p1.CompareTo(p2) < 0);
             
-            // If the other is null, then the instance should be greater.
-            Assert.True(comparable.CompareTo(null) > 0);
+            // If the other version is null, then the current instance should be greater.
+            Assert.True(p1.CompareTo(null) > 0);
         }
     }
     
