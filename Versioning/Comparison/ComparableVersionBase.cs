@@ -6,7 +6,7 @@ namespace BenjcoreUtil.Versioning.Comparison;
 /// </summary>
 /// <remarks>
 /// When referring to a version comparer, use the interface <see cref="IComparableVersion{TSelf}"/>
-/// (or <see cref="IComparableVersion"/> if you don't need to specify the type), rather than this class.
+/// (or <see cref="IComparableVersion{T}"/> if you don't need to specify the type), rather than this class.
 /// </remarks>
 public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> where TSelf : ComparableVersionBase<TSelf>
 {

@@ -35,7 +35,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// or either returns null or is null if it is not a preview version.
     /// </param>
     /// <param name="comparer">
-    /// An optional <see cref="IComparableVersion"/> to use for comparison.
+    /// An optional version comparer to use for comparison.
     /// <see cref="DateTimeComparer"/> and <see cref="BuildNumberComparer"/> are supported.
     /// The comparer will not be used in comparison if the other version does not have the
     /// same comparer set, or their <see cref="SimpleVersion"/>s are not equal.
@@ -45,7 +45,7 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// or vice versa. Also thrown when <paramref name="comparer"/> is not null, but is not of a supported type.
     /// </exception>
     public PreviewVersion(SimpleVersion base_version, uint? branch_revision = null,
-        Func<IEnumerable<VersionBranch>, VersionBranch?>? branch_selector = null, IComparableVersion? comparer = null)
+        Func<IEnumerable<VersionBranch>, VersionBranch?>? branch_selector = null, IVersionComparer? comparer = null)
     {
         if (comparer is not null)
             SetComparer(comparer); // Will throw an exception if the comparer is not supported.
@@ -69,12 +69,13 @@ public class PreviewVersion : ComparableVersionBase<PreviewVersion>, IParseableV
     /// Sets the <see cref="BuildDate"/> or <see cref="BuildNumber"/> to use for comparison.
     /// </summary>
     /// <param name="comparer">
-    /// The <see cref="IComparableVersion"/> to use for comparison.
+    /// The version comparer to use for comparison.
     /// </param>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="comparer"/> is not of a supported type.
     /// </exception>
-    public void SetComparer(IComparableVersion comparer)
+    /// <seealso cref="IVersionComparer{T}"/>
+    public void SetComparer(IVersionComparer comparer)
     {
         switch (comparer)
         {

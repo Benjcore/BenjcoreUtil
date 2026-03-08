@@ -4,7 +4,7 @@ namespace BenjcoreUtil.Versioning.Comparison;
 /// A build number based version comparer where the larger build number is considered newer.
 /// </summary>
 /// <param name="build_number">The current build number.</param>
-public sealed class BuildNumberComparer(ulong build_number) : ComparableVersionBase<BuildNumberComparer>
+public sealed class BuildNumberComparer(ulong build_number) : ComparableVersionBase<BuildNumberComparer>, IVersionComparer<BuildNumberComparer>
 {
     /// <summary>
     /// The build number of the current instance.

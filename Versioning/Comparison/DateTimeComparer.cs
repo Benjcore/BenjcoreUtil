@@ -4,7 +4,7 @@ namespace BenjcoreUtil.Versioning.Comparison;
 /// A build <see cref="DateTime"/> based version comparer where the later build date time is considered newer.
 /// </summary>
 /// <param name="build_date_time">The current build <see cref="DateTime"/>.</param>
-public sealed class DateTimeComparer(DateTime build_date_time) : ComparableVersionBase<DateTimeComparer>
+public sealed class DateTimeComparer(DateTime build_date_time) : ComparableVersionBase<DateTimeComparer>, IVersionComparer<DateTimeComparer>
 {
     /// <summary>
     /// The build <see cref="DateTime"/> of the current instance.

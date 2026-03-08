@@ -248,7 +248,7 @@ public sealed class PreviewVersionTests
     }
 }
 
-internal sealed class InvalidComparer : ComparableVersionBase<InvalidComparer>
+internal sealed class InvalidComparer : ComparableVersionBase<InvalidComparer>, IVersionComparer<InvalidComparer>
 {
     public override (bool NewerThan, bool EqualTo) Compare(InvalidComparer other) => (false, true);
 }

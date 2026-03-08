@@ -1,17 +1,12 @@
 namespace BenjcoreUtil.Versioning.Comparison;
 
 /// <summary>
-/// A variant of <see cref="IComparableVersion{TSelf}"/> with no type parameter.
-/// </summary>
-public interface IComparableVersion : IVersion;
-
-/// <summary>
 /// A version comparer that supports comparison to other versions of the same type.
 /// </summary>
 /// <typeparam name="TSelf">
 /// The type of the class that implements this interface.
 /// </typeparam>
-public interface IComparableVersion<in TSelf> : IComparableVersion, IComparable<TSelf> where TSelf : IComparableVersion
+public interface IComparableVersion<in TSelf> : IVersion, IComparable<TSelf> where TSelf : IComparableVersion<TSelf>
 {
     /// <summary>
     /// Compares the current <see cref="IComparableVersion{TSelf}"/> instance to another.
