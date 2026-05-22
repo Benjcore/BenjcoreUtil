@@ -54,7 +54,7 @@ public readonly struct LogStyle
     
     /// <summary>
     /// Represents the escape character to use for <see cref="LogStyle"/> formatting.
-    /// By default this is '%'.
+    /// By default, this is: <c>'%'</c>.
     /// </summary>
     internal const char EscapeCharacter = '%';
     

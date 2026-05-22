@@ -134,7 +134,7 @@ public class RSAKeys
     /// </remarks>
     public void UpdateKeys()
     {
-        // Create a RSA-CSP
+        // Create an RSA-CSP
         var csp = new RSACryptoServiceProvider(KeySize);
         
         // Get Keys
@@ -201,7 +201,7 @@ public class RSAKeys
     //
     
     /// <summary>
-    /// Encrypts data using a RSA public key.
+    /// Encrypts data using an RSA public key.
     /// </summary>
     /// <param name="input">A string containing the data you wish to encrypt.</param>
     /// <param name="publicKey">The public key that will be used to encrypt <paramref name="input"/>.</param>
@@ -217,7 +217,7 @@ public class RSAKeys
     }
     
     /// <summary>
-    /// Encrypts data using a RSA public key.
+    /// Encrypts data using an RSA public key.
     /// </summary>
     /// <param name="input">A byte array containing the data you wish to encrypt.</param>
     /// <param name="publicKey">The public key that will be used to encrypt <paramref name="input"/>.</param>
@@ -232,7 +232,7 @@ public class RSAKeys
     }
     
     /// <summary>
-    /// Encrypts data using a RSA public key and encodes it using base64.
+    /// Encrypts data using an RSA public key and encodes it using base64.
     /// </summary>
     /// <param name="input">A string containing the data you wish to encrypt.</param>
     /// <param name="publicKey">The public key that will be used to encrypt <paramref name="input"/>.</param>
@@ -246,7 +246,7 @@ public class RSAKeys
     }
     
     /// <summary>
-    /// Encrypts data using a RSA public key and encodes it using base64.
+    /// Encrypts data using an RSA public key and encodes it using base64.
     /// </summary>
     /// <param name="input">A byte array containing the data you wish to encrypt.</param>
     /// <param name="publicKey">The public key that will be used to encrypt <paramref name="input"/>.</param>
@@ -264,7 +264,7 @@ public class RSAKeys
     //
     
     /// <summary>
-    /// Decrypts data using a RSA private key.
+    /// Decrypts data using an RSA private key.
     /// </summary>
     /// <param name="base64Input">A string containing the encrypted data encoded in base64.</param>
     /// <param name="privateKey">The private key that will be used to decrypt <paramref name="base64Input"/>.</param>
@@ -282,7 +282,7 @@ public class RSAKeys
     }
     
     /// <summary>
-    /// Decrypts data using a RSA private key.
+    /// Decrypts data using an RSA private key.
     /// </summary>
     /// <param name="inputBytes">A byte array containing the encrypted data.</param>
     /// <param name="privateKey">The private key that will be used to decrypt <paramref name="inputBytes"/>.</param>
@@ -298,7 +298,7 @@ public class RSAKeys
     }
     
     /// <summary>
-    /// Decrypts data using a RSA private key.
+    /// Decrypts data using an RSA private key.
     /// </summary>
     /// <param name="base64Input">A string containing the encrypted data encoded in base64.</param>
     /// <param name="privateKey">The private key that will be used to decrypt <paramref name="base64Input"/>.</param>
@@ -315,7 +315,7 @@ public class RSAKeys
     }
     
     /// <summary>
-    /// Decrypts data using a RSA private key.
+    /// Decrypts data using an RSA private key.
     /// </summary>
     /// <param name="inputBytes">A byte array containing the encrypted data.</param>
     /// <param name="privateKey">The private key that will be used to decrypt <paramref name="inputBytes"/>.</param>
@@ -353,7 +353,7 @@ public class RSAKeys
 }
 
 /// <summary>
-/// An enum that represents a RSA key length. e.g.
+/// An enum that represents an RSA key length. e.g.
 /// <p>RSA2048 or RSA4096.</p>
 /// </summary>
 public enum RSAKeyLengths
