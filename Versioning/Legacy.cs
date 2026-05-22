@@ -301,7 +301,7 @@ public class Simple : IVersionType<object> {
   /// The 'v' will be ignored.</remarks>
   public static Simple Parse([NotNull] string? input) {
 
-    if (input is null || input.Length < 1) throw new ArgumentNullException(nameof(input));
+    if (String.IsNullOrEmpty(input)) throw new ArgumentNullException(nameof(input));
 
     if (input.ToLower()[0] is 'v') input = input[1..];
     string[] inputSplit = input.Split('.');

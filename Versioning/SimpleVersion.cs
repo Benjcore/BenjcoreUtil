@@ -214,7 +214,7 @@ public class SimpleVersion : ComparableVersionBase<SimpleVersion>, IParseableVer
     /// <remarks><paramref name="input"/> may begin with a 'v' (case-insensitive) for styling. The 'v' will be ignored.</remarks>
     public static SimpleVersion Parse([NotNull] string? input)
     {
-        if (input is null || input.Length < 1)
+        if (String.IsNullOrEmpty(input))
         {
             throw new ArgumentNullException(nameof(input));
         }
