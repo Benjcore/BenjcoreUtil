@@ -11,8 +11,8 @@
         <Authors>Benj_2005</Authors>
         <Company>Benjcore</Company>
         <!-- When bumping version numbers, don't forget to update GetUtilVersion.cs. -->
-        <Version>2.2.0-rc.6</Version>
-        <FileVersion>2.2.0.2</FileVersion>
+        <Version>2.2.0-rc.7</Version>
+        <FileVersion>2.2.0.3</FileVersion>
         <AssemblyVersion>2.2.0</AssemblyVersion>
         <Description>BenjcoreUtil - .NET Utility Library</Description>
         <Copyright>Copyright © Benj_2005 / Benjcore 2026</Copyright>
