@@ -30,7 +30,7 @@ public abstract class ComparableVersionBase<TSelf> : IComparableVersion<TSelf> w
             return Compare(comparer);
         }
         
-        throw new InvalidOperationException($"Cannot compare to version type: '{nameof(other)}'.");
+        throw new InvalidOperationException($"Cannot compare to version type: '{other.GetType().FullName}'.");
     }
     
     /// <inheritdoc cref="IVersion.IsNewerThan"/>
