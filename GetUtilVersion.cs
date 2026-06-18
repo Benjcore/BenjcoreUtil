@@ -1,6 +1,5 @@
 ﻿global using System;
 global using System.Collections.Generic;
-using System.Linq;
 using BenjcoreUtil.Versioning;
 #pragma warning disable CS0618
 using Version = BenjcoreUtil.Versioning.Version;
@@ -13,14 +12,16 @@ public static class GetUtilVersion
     // Internal version identifiers
     // When bumping the version, don't forget to update BenjcoreUtil.csproj.
     private static uint[] _base_version => [2, 2, 0];
-    private static readonly uint? _preview_revision = 7;
-    private const string? _preview_branch = "rc"; // Should be the branch's suffix.
+    // Only necessary for non-stable releases:
+    //private static readonly uint? _preview_revision = null;
+    //private const string? _preview_branch = null; // Should be the branch's suffix.
     
     /// <summary>
     /// BenjcoreUtil Version as a BenjcoreUtil <see cref="PreviewVersion"/> object.
     /// </summary>
-    public static PreviewVersion VersionAsPreviewVersion =>
-        new(new SimpleVersion(_base_version), _preview_revision, x => x.SingleOrDefault(b => b.Suffix == _preview_branch));
+    public static PreviewVersion VersionAsPreviewVersion => new(new SimpleVersion(_base_version));
+    // Implementation used for non-stable releases:
+    //    new(new SimpleVersion(_base_version), _preview_revision, x => x.SingleOrDefault(b => b.Suffix == _preview_branch));
     
     /// <summary>
     /// BenjcoreUtil Version as a BenjcoreUtil <see cref="SimpleVersion"/> object.
